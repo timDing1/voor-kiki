@@ -3,97 +3,151 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Voor jou 💌</title>
+  <title>Voor jou 💫</title>
   <meta name="description" content="Een kleine, lieve, interactieve liefdesbrief als webapp 😘" />
   <style>
     :root {
-      --bg: #fff7fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --accent: #ef476f; /* roze/rood */
-      --accent-2: #ffd166; /* geel */
-      --accent-3: #06d6a0; /* mint */
-      --muted: #6b7280;
-      --shadow: 0 10px 30px rgba(239,71,111,.15);
+      --bg: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      --card: rgba(255,255,255,0.08);
+      --text: #f9fafb;
+      --accent: #ef476f;
+      --muted: #9ca3af;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
       --radius: 18px;
     }
-    @media (prefers-color-scheme: dark) {
-      :root { --bg:#0b0c10; --card:#12131a; --text:#e5e7eb; --muted:#9ca3af; --shadow: 0 12px 30px rgba(0,0,0,.55);}    }
 
-    * { box-sizing: border-box }
-    html, body { height:100% }
-    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
 
-    .wrap { min-height: 100dvh; display:grid; place-items:center; padding: clamp(16px, 4vw, 48px); }
+    .wrap {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: clamp(16px, 4vw, 48px);
+    }
 
-    .card { width:min(920px, 100%); background:var(--card); border-radius: var(--radius); box-shadow: var(--shadow); position:relative; overflow:hidden; }
+    .card {
+      width: min(920px, 100%);
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
 
-    .ribbon { position:absolute; inset:auto -50px  auto auto; top:20px; rotate: 12deg; background:linear-gradient(135deg, var(--accent), #ff7aa2); color:white; padding:.35rem .9rem; font-weight:700; border-radius:999px; box-shadow: var(--shadow); font-size:.85rem }
+    header {
+      padding: clamp(16px,3vw,28px) clamp(16px,4vw,40px);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px dashed rgba(255,255,255,0.1);
+    }
 
-    header { padding:clamp(16px,3vw,28px) clamp(16px,4vw,40px); display:flex; align-items:center; gap:14px; border-bottom: 1px dashed rgba(0,0,0,.06) }
     header .emoji { font-size: clamp(34px, 5vw, 50px) }
-    header h1 { margin:0; font-size:clamp(22px,4.5vw,34px); line-height:1.15 }
+    header h1 { margin: 0; font-size: clamp(22px,4.5vw,34px); line-height: 1.15 }
     header small { color: var(--muted) }
 
-    main { padding:clamp(18px,4vw,44px); display:grid; grid-template-columns: 1fr; gap:28px }
+    main { padding: clamp(18px,4vw,44px); display: grid; gap: 28px }
     @media (min-width: 840px) { main { grid-template-columns: 1.2fr .8fr; align-items: start } }
 
-    .panel { background:linear-gradient(180deg, rgba(255,255,255,.66), rgba(255,255,255,0)); border:1px solid rgba(0,0,0,.06); border-radius: calc(var(--radius) - 6px); padding: clamp(14px, 2.5vw, 24px) }
+    .panel {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: calc(var(--radius) - 6px);
+      padding: clamp(14px, 2.5vw, 24px);
+    }
 
-    .type { font-size:clamp(18px,3.6vw,22px); line-height:1.6 }
+    .type { font-size: clamp(18px,3.6vw,22px); line-height: 1.6; }
+
     .muted { color: var(--muted) }
 
     .btns { display:flex; flex-wrap:wrap; gap:10px; align-items:center }
-    button, .chip { appearance:none; border:none; padding:.7rem 1rem; border-radius:12px; background:#f5f6f7; color:var(--text); cursor:pointer; font-weight:600; box-shadow: inset 0 -2px 0 rgba(0,0,0,.05); transition:.2s transform, .2s filter }
-    button:hover { transform: translateY(-2px) }
+    button, .chip {
+      appearance: none;
+      border: none;
+      padding: .7rem 1rem;
+      border-radius: 12px;
+      background: #f5f6f7;
+      color: #111;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,.05);
+      transition: .2s transform, .2s filter;
+    }
+    button:hover { transform: translateY(-2px); }
     .primary { background: linear-gradient(180deg, #ffdbe6, #ffc5d7); color:#8b1b3f }
     .good { background: linear-gradient(180deg, #dcffe6, #bff5d7); color:#0e6b4b }
-    .chip { font-size:.85rem }
 
-    details { border:1px dashed rgba(0,0,0,.1); border-radius:12px; padding:.7rem 1rem }
-    details[open] { background: rgba(0,0,0,.02) }
+    details {
+      border: 1px dashed rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: .7rem 1rem;
+      color: #fff;
+    }
+    details[open] { background: rgba(255,255,255,0.05); }
 
-    .footer { padding: 8px 18px 24px; text-align:center; color:var(--muted) }
+    .footer {
+      padding: 8px 18px 24px;
+      text-align: center;
+      color: var(--muted);
+    }
 
     /* Floating hearts background */
-    .bg { position: fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
+    .bg, .stars { position: fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
     .heart { position:absolute; font-size:12px; opacity:0; animation: float 6s linear forwards }
     @keyframes float { 0%{ transform: translateY(20px) scale(.6) rotate(0deg); opacity:0 } 12%{ opacity:.85 } 100%{ transform: translateY(-110vh) scale(1.3) rotate(18deg); opacity:0 } }
 
     /* Hidden message */
     .secret { display:none; margin-top:10px; font-size: 1.05rem }
 
-    /* Slider fun */
-    .meter { display:grid; gap:8px }
-    .meter output { font-weight:800; font-size: 1.8rem; text-align:center }
+    .toast { position: fixed; left:50%; transform: translateX(-50%); bottom: 18px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding:.6rem 1rem; border-radius:999px; box-shadow: var(--shadow); z-index: 9; display:none; color:white }
 
-    .kiss { filter:hue-rotate(-12deg) }
+    /* Stars */
+    .stars span {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.8;
+      animation: twinkle 4s infinite ease-in-out alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.3; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1.2); }
+    }
 
-    .badge { display:inline-flex; align-items:center; gap:8px; padding:.45rem .7rem; border:1px solid rgba(0,0,0,.08); border-radius:999px; background:rgba(255,255,255,.6) }
+    .sterrenquote {
+      font-style: italic;
+      color: #ffd6f3;
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+      animation: fadein 2.5s ease;
+    }
 
-    .toast { position: fixed; left:50%; transform: translateX(-50%); bottom: 18px; background: var(--card); border: 1px solid rgba(0,0,0,.08); padding:.6rem 1rem; border-radius:999px; box-shadow: var(--shadow); z-index: 9; display:none }
-
-    /* Brief-styling */
-    .letter { line-height:1.75; font-size:1.02rem }
-    .letter h4 { margin: .2rem 0 0.6rem 0; font-size:1.1rem; color:var(--accent) }
-    .letter p { margin: .7rem 0 }
-    .letter .sign { margin-top: .8rem; color: var(--muted); font-style: italic }
-    .anchor { text-decoration: underline; cursor: pointer }
+    @keyframes fadein { from {opacity:0} to {opacity:1} }
   </style>
 </head>
 <body>
-  <!-- Ambient hearts -->
+  <div class="stars" id="stars"></div>
   <div class="bg" id="bg" aria-hidden="true"></div>
 
   <div class="wrap">
     <article class="card" role="main">
-      <span class="ribbon">Speciaal voor jou ✨</span>
       <header>
         <div class="emoji">💌</div>
         <div>
           <h1>
             Voor <span id="naam">Jou</span>
-            <small class="muted" style="display:block">(ja jij daar met die mooie glimlach)</small>
+            <small class="muted">(ja jij daar met die mooie glimlach)</small>
           </h1>
         </div>
       </header>
@@ -101,79 +155,34 @@
       <main>
         <section class="panel" aria-live="polite">
           <p class="type" id="type"></p>
+          <p class="sterrenquote">✨ Weet je wat het mooiste is? Dat onze sterren precies op de juiste plek staan. ✨</p>
+
           <div class="btns">
             <button class="primary" id="openBtn">Open je cadeautje 🎁</button>
-            <button id="heartBtn" title="Laat wat liefde vallen">Laat harten vallen ❤️</button>
-            <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
-            <span class="chip badge" id="petname">Schatje 🐻</span>
-            <a class="chip anchor" href="#brief">Lees mijn brief 💌</a>
+            <button id="heartBtn">Laat harten vallen ❤️</button>
+            <button class="good" id="secretBtn">Geheime boodschap 🔐</button>
+            <span class="chip" id="petname">Schatje 🐻</span>
           </div>
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
 
         <aside class="panel">
-          <h3 style="margin-top:0">Kleine extra's</h3>
-          <details>
-            <summary>Inside jokes 😂</summary>
-            <ul>
-              <li>TODO: Vervang met jullie grap #1</li>
-              <li>TODO: Vervang met jullie grap #2</li>
-              <li>TODO: Vervang met jullie grap #3</li>
-            </ul>
-          </details>
-
-          <details>
-            <summary>Hoeveel geef ik om je? 💖</summary>
-            <div class="meter">
-              <input type="range" min="0" max="100" value="99" id="slider" />
-              <output id="loveOut">99%</output>
-            </div>
-          </details>
-
-          <details>
-            <summary>Kleine quiz 📚</summary>
-            <p class="muted">Wat is mijn favoriete ding aan jou?</p>
-            <div class="btns">
-              <button class="chip">Je humor</button>
-              <button class="chip">Je ogen</button>
-              <button class="chip">Alles (correct)</button>
-            </div>
-          </details>
-
-          <details>
-            <summary>Cheat codes 🎮</summary>
-            <ul class="muted">
-              <li>Druk op <kbd>H</kbd> om harten te laten vallen</li>
-              <li>Voer de <i>Konami code</i> in om een extra bericht te zien</li>
-              <li>Voeg <code>?naam=JouwNaam</code> toe aan de URL voor personalisatie</li>
-            </ul>
+          <details open>
+            <summary>🌟 Mijn brief aan jou</summary>
+            <p>Aller allerliefste Kiki Dingewolfs,</p>
+            <p>Ik denk dat ik alles al gezegd heb, maar je hebt vannacht nóg net even wat extra door mijn hoofd gespookt. Waarna ik vervolgens nu ben begonnen aan dit berichtje. Dus bij deze nogmaals, omdat ik het belangrijk vind dat je weet wat je voor mij betekent.</p>
+            <p>Ik vind het zo fijn om met je te zijn. Je brengt zo veel warmte en echt iets bijzonders.</p>
+            <p>De situatie is nou eenmaal lastig, toch geniet ik van wat we samen hebben. We hebben misschien ‘niets’, maar tegelijk voelt het als alles. We zijn geen ‘wij’ in woorden en in ons verstand, maar wel in gevoel.</p>
+            <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel wil ik je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
+            Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet ik wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
+            <p>Je verdient het mooiste Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
+            <p class="muted">— van mij, voor jou 💗</p>
           </details>
         </aside>
-
-        <!-- ====== JOUW BRIEF HIER ====== -->
-        <section class="panel letter" id="brief">
-          <h3 style="margin-top:0">Mijn brief aan jou</h3>
-          <h4>Aller allerliefste Kiki Dingewolfs,</h4>
-
-          <p>Ik denk dat ik alles al gezegd heb, maar je hebt vannacht nóg net even wat extra door mijn hoofd gespookt. Waarna ik vervolgens nu ben begonnen aan dit berichtje. Dus bij deze nogmaals, omdat ik het belangrijk vind dat je weet wat je voor mij betekent.</p>
-
-          <p>Ik vind het zo fijn om met je te zijn. Je brengt zo veel warmte en echt iets bijzonders.</p>
-
-          <p>De situatie is nou eenmaal lastig, toch geniet ik van wat we samen hebben. We hebben misschien ‘niets’, maar tegelijk voelt het als alles. We zijn geen ‘wij’ in woorden en in ons verstand, maar wel in gevoel.</p>
-
-          <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel wil ik je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
-          Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet ik wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
-
-          <p>Je verdient het mooiste Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
-
-          <p class="sign">— van mij, voor jou 💗</p>
-        </section>
-        <!-- ====== EINDE BRIEF ====== -->
-
       </main>
 
       <div class="footer">
-        Gemaakt met 💗 en een beetje HTML/JS. — <span class="muted">(C) <span id="year"></span> Jouw Naam</span>
+        Gemaakt met 💗 en sterrenstof ✨ — <span class="muted">(C) <span id="year"></span> Jouw Naam</span>
       </div>
     </article>
   </div>
@@ -181,141 +190,78 @@
   <div class="toast" id="toast">Geheime mode geactiveerd 😎</div>
 
   <script>
-    // ======= Personalisatie via URL =======
-    const params = new URLSearchParams(location.search)
-    const naamParam = params.get('naam')
+    // Personalisatie
+    const params = new URLSearchParams(location.search);
+    const naamParam = params.get('naam');
     if (naamParam) {
-      document.getElementById('naam').textContent = decodeURIComponent(naamParam)
-      document.title = `Voor ${decodeURIComponent(naamParam)} 💌`
+      document.getElementById('naam').textContent = decodeURIComponent(naamParam);
+      document.title = `Voor ${decodeURIComponent(naamParam)} 💫`;
     }
 
-    // ======= Jaar =======
-    document.getElementById('year').textContent = new Date().getFullYear()
+    // Jaar
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ======= Typewriter tekst =======
-    const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.  \n\n<i>P.S. Klik op “Lees mijn brief 💌” hieronder.</i>`
-    const typeEl = document.getElementById('type')
-    let i = 0
-    ;(function typeWriter(){
+    // Typewriter
+    const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.`;
+    const typeEl = document.getElementById('type');
+    let i = 0;
+    (function typeWriter(){
       if (i < text.length) {
-        const ch = text[i++]
-        // simpele HTML-aware typewriter: laat tags meteen vallen
+        const ch = text[i++];
         if (ch === '<') {
-          const end = text.indexOf('>', i)
-          typeEl.innerHTML += text.slice(i-1, end+1)
-          i = end + 1
+          const end = text.indexOf('>', i);
+          typeEl.innerHTML += text.slice(i-1, end+1);
+          i = end + 1;
         } else if (ch === '\n') {
-          typeEl.innerHTML += '<br/>'
+          typeEl.innerHTML += '<br/>';
         } else {
-          typeEl.innerHTML += ch
+          typeEl.innerHTML += ch;
         }
-        setTimeout(typeWriter, 16)
+        setTimeout(typeWriter, 16);
       }
-    })()
+    })();
 
-    // ======= Smooth-Scroll naar de brief als #brief in de URL zit =======
-    if (location.hash === '#brief') {
-      setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 200)
-    }
-
-    // ======= Floating hearts =======
-    const bg = document.getElementById('bg')
+    // Floating hearts
+    const bg = document.getElementById('bg');
     function dropHearts(count = 18) {
       for (let j = 0; j < count; j++) {
-        const span = document.createElement('span')
-        span.className = 'heart'
-        span.textContent = ['❤','💕','💖','💘','💗'][Math.floor(Math.random()*5)]
-        span.style.left = Math.random()*100 + 'vw'
-        span.style.bottom = '-20px'
-        span.style.fontSize = (10 + Math.random()*26) + 'px'
-        span.style.animationDuration = (4 + Math.random()*4) + 's'
-        span.style.filter = `hue-rotate(${Math.random()*30-15}deg)`
-        bg.appendChild(span)
-        setTimeout(() => span.remove(), 7000)
+        const span = document.createElement('span');
+        span.className = 'heart';
+        span.textContent = ['❤','💕','💖','💘','💗'][Math.floor(Math.random()*5)];
+        span.style.left = Math.random()*100 + 'vw';
+        span.style.bottom = '-20px';
+        span.style.fontSize = (10 + Math.random()*26) + 'px';
+        span.style.animationDuration = (4 + Math.random()*4) + 's';
+        bg.appendChild(span);
+        setTimeout(() => span.remove(), 7000);
       }
     }
+    setInterval(()=> dropHearts(2), 2500);
 
-    // ambient trickle
-    setInterval(()=> dropHearts(2), 2400)
+    // Stars
+    const starContainer = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+      const s = document.createElement('span');
+      const size = Math.random() * 2 + 1;
+      s.style.width = `${size}px`;
+      s.style.height = `${size}px`;
+      s.style.left = `${Math.random() * 100}%`;
+      s.style.top = `${Math.random() * 100}%`;
+      s.style.animationDelay = `${Math.random() * 5}s`;
+      starContainer.appendChild(s);
+    }
 
-    // ======= Buttons =======
-    document.getElementById('heartBtn').addEventListener('click', () => dropHearts(30))
-    document.addEventListener('keydown', (e) => { if (e.key.toLowerCase()==='h') dropHearts(35) })
-
-    // Secret toggle
-    const secret = document.getElementById('secret')
+    // Buttons
+    document.getElementById('heartBtn').addEventListener('click', () => dropHearts(30));
+    const secret = document.getElementById('secret');
     document.getElementById('secretBtn').addEventListener('click', () => {
-      secret.style.display = secret.style.display === 'block' ? 'none' : 'block'
-    })
-
-    // ======= Slider fun =======
-    const slider = document.getElementById('slider')
-    const out = document.getElementById('loveOut')
-    const updateOut = () => {
-      const v = Number(slider.value)
-      out.textContent = v >= 100 ? '∞' : v + '%'
-    }
-    slider.addEventListener('input', updateOut)
-    updateOut()
-
-    // ======= Pet names cycler =======
-    const pet = document.getElementById('petname')
-    const pets = ['Schatje 🐻','Lieve jij ✨','Lieverd 🌷','Knappe jij 🦊','Mijn favoriet 💫']
+      secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
+    });
+    const pet = document.getElementById('petname');
+    const pets = ['Schatje 🐻','Lieve jij ✨','Lieverd 🌷','Knappe jij 🦊','Mijn favoriet 💫'];
     pet.addEventListener('click', () => {
-      pet.textContent = pets[Math.floor(Math.random()*pets.length)]
-    })
-
-    // ======= Konami code easter egg =======
-    const toast = document.getElementById('toast')
-    const K = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
-    let buffer = []
-    window.addEventListener('keydown', (e) => {
-      buffer.push(e.key)
-      if (buffer.length > K.length) buffer.shift()
-      if (K.every((k, i) => buffer[i]?.toLowerCase() === k.toLowerCase())) {
-        buffer = []
-        showToast('Geheime mode geactiveerd 😎')
-        surprise()
-      }
-    })
-
-    function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 2200) }
-
-    function surprise(){
-      dropHearts(60)
-      const extra = document.createElement('p')
-      extra.className = 'secret'
-      extra.style.display = 'block'
-      extra.innerHTML = 'Bonus: als je dit leest, ben je officieel mijn <b>favoriete mens</b>. 🎉'
-      typeEl.after(extra)
-    }
-
-    // ======= "cadeautje" knop =======
-    document.getElementById('openBtn').addEventListener('click', () => {
-      kissRain()
-      showToast('Kusjesregen! 😘')
-      // scrol ook even naar de brief
-      document.getElementById('brief')?.scrollIntoView({behavior:'smooth'})
-    })
-
-    function kissRain(){
-      for (let i=0;i<42;i++){
-        const s = document.createElement('span')
-        s.textContent = Math.random()>0.5 ? '💋' : '😘'
-        s.style.position='fixed'
-        s.style.left = Math.random()*100 + 'vw'
-        s.style.top = '-10px'
-        s.style.fontSize = (18 + Math.random()*22) + 'px'
-        s.style.transition = 'transform 3s linear, opacity 3s'
-        s.className = 'kiss'
-        document.body.append(s)
-        requestAnimationFrame(() => {
-          s.style.transform = `translateY(${110+Math.random()*20}vh)`
-          s.style.opacity = '0'
-        })
-        setTimeout(() => s.remove(), 3200)
-      }
-    }
+      pet.textContent = pets[Math.floor(Math.random()*pets.length)];
+    });
   </script>
 </body>
 </html>
