@@ -123,6 +123,9 @@
     .good{ background: linear-gradient(180deg, #dcffe6, #bff5d7); color:#0e6b4b }
     .chip{ font-size:.85rem }
 
+    details{ border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:.7rem 1rem; color:#fff }
+    details[open]{ background: rgba(255,255,255,.05) }
+
     .footer{ padding: 8px 18px 24px; text-align:center; color:var(--muted) }
 
     /* Hearts */
@@ -138,28 +141,7 @@
     .letter p{ margin:.7rem 0 }
     .letter .sign{ margin-top:.8rem; color: var(--muted); font-style: italic }
 
-    .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top:.8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
-
-    /* ===== Kalender (maandgrid) ===== */
-    .cal{ display:grid; gap:.7rem; margin-top:.8rem }
-    .cal .cal-head{ display:flex; justify-content:space-between; align-items:baseline }
-    .cal .month{ font-weight:800; }
-    .cal .year{ color:var(--muted); font-weight:600 }
-    .cal .grid{ display:grid; grid-template-columns: repeat(7, 1fr); gap:6px }
-    .cal .dow{ text-align:center; font-size:.85rem; color:var(--muted); padding:.25rem 0 }
-    .cal .cell{
-      min-height:78px; padding:.55rem .6rem; border-radius:10px;
-      background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
-      display:flex; flex-direction:column; gap:.35rem;
-    }
-    .cal .day{ font-weight:800; font-size:.9rem; opacity:.95 }
-    .cal .event{
-      font-size:.82rem; line-height:1.2;
-      padding:.3rem .45rem; border-radius:8px;
-      background: linear-gradient(180deg, rgba(255,219,230,.85), rgba(255,197,215,.8));
-      color:#7b1233; font-weight:700; box-shadow: inset 0 -2px 0 rgba(0,0,0,.05);
-    }
-    .cal .empty{ background: transparent; border:1px dashed rgba(255,255,255,.12) }
+    .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top: .8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
     @keyframes fadein{ from{opacity:0} to{opacity:1} }
   </style>
 </head>
@@ -204,40 +186,51 @@
           <p class="sterrenquote">✨ Weet je wat het mooiste is? Dat onze sterren precies op de juiste plek staan. ✨</p>
 
           <div class="btns">
+            <!-- AANGEPAST: tekst van de knop -->
             <button class="primary" id="openBtn">Ontvang kusjes 💋</button>
+            <!-- VERWIJDERD: de 'Laat harten vallen ❤️'-knop -->
             <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
             <span class="chip" id="petname">Schatje 🐻</span>
           </div>
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
 
-        <!-- KLEINE EXTRA'S -->
         <aside class="panel">
           <h3 style="margin-top:0">Kleine extra's</h3>
-
-          <!-- Onze playlist -->
-          <details open>
-            <summary>Onze playlist 🎶</summary>
-            <ul style="margin:.6rem 0 0 0; padding-left:1rem; line-height:1.7">
-              <li><a href="https://open.spotify.com/search/Stop%20De%20Tijd%20Marco%20Borsato" target="_blank" rel="noopener">Stop De Tijd — Marco Borsato</a></li>
-              <li><a href="https://open.spotify.com/search/Zij%20Laat%20Me%20Praten%20Acda%20en%20de%20Munnik" target="_blank" rel="noopener">Zij Laat Me Praten — Acda en de Munnik</a></li>
-              <li><a href="https://open.spotify.com/search/Zoveel%20Liefde%20Tommie%20Christiaan" target="_blank" rel="noopener">Zoveel Liefde — Tommie Christiaan</a></li>
-              <li><a href="https://open.spotify.com/search/Platonisch%20Noor" target="_blank" rel="noopener">Platonisch — Noor</a></li>
+          <details>
+            <summary>Inside jokes 😂</summary>
+            <ul>
+              <li>TODO: Vervang met jullie grap #1</li>
+              <li>TODO: Vervang met jullie grap #2</li>
+              <li>TODO: Vervang met jullie grap #3</li>
             </ul>
           </details>
 
-          <!-- Onze agenda: kalendergrid -->
-          <details style="margin-top:12px" open>
-            <summary>Onze agenda 📅</summary>
-            <div class="cal" id="cal">
-              <div class="cal-head">
-                <div class="month" id="calMonth">November</div>
-                <div class="year" id="calYear"></div>
-              </div>
-              <div class="grid" id="calGrid">
-                <!-- JS vult hier de dagen -->
-              </div>
+          <details>
+            <summary>Hoeveel geef ik om je? 💖</summary>
+            <div class="meter">
+              <input type="range" min="0" max="100" value="99" id="slider" />
+              <output id="loveOut">99%</output>
             </div>
+          </details>
+
+          <details>
+            <summary>Kleine quiz 📚</summary>
+            <p class="muted">Wat is mijn favoriete ding aan jou?</p>
+            <div class="btns">
+              <button class="chip">Je humor</button>
+              <button class="chip">Je ogen</button>
+              <button class="chip">Alles (correct)</button>
+            </div>
+          </details>
+
+          <details>
+            <summary>Cheat codes 🎮</summary>
+            <ul class="muted">
+              <li>Druk op <kbd>H</kbd> om harten te laten vallen</li>
+              <li>Voer de <i>Konami code</i> in om een extra bericht te zien</li>
+              <li>Voeg <code>?naam=JouwNaam</code> toe aan de URL voor personalisatie</li>
+            </ul>
           </details>
         </aside>
 
@@ -319,6 +312,7 @@
     seedStars(document.getElementById('stars'),   140, 1, 2.2);
     seedStars(document.getElementById('stars2'),  90,  1.5, 2.8);
     seedStars(document.getElementById('stars3'),  60,  2, 3.4);
+
     seedStars(document.getElementById('stars_i'),  60, 1, 2);
     seedStars(document.getElementById('stars2_i'), 40, 1.2, 2.4);
     seedStars(document.getElementById('stars3_i'), 25, 1.6, 3);
@@ -349,14 +343,18 @@
         setTimeout(() => span.remove(), 7000);
       }
     }
+    // Ambient hearts starten na intro
     let ambientHearts;
     function startAmbientHearts(){ ambientHearts = setInterval(()=> dropHearts(2), 2600) }
+    function stopAmbientHearts(){ clearInterval(ambientHearts) }
 
     /* Buttons */
+    // VERWIJDERD: document.getElementById('heartBtn')... (bestond niet meer)
     const secret = document.getElementById('secret');
     document.getElementById('secretBtn').addEventListener('click', () => {
       secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
     });
+
     const pet = document.getElementById('petname');
     const pets = ['Schatje 🐻','Lieve jij ✨','Lieverd 🌷','Knappe jij 🦊','Mijn favoriet 💫'];
     pet.addEventListener('click', () => {
@@ -385,7 +383,7 @@
       }
     });
 
-    /* Ontvang kusjes */
+    /* Ontvang kusjes (voorheen: Open je cadeautje) */
     function kissRain(){
       for (let i=0;i<42;i++){
         const s = document.createElement('span');
@@ -406,10 +404,11 @@
     }
     document.getElementById('openBtn').addEventListener('click', () => {
       kissRain();
+      dropHearts(20);
       showToast('Kusjesregen! 😘');
     });
 
-    /* Intro -> App overgang (star-wipe) */
+    /* Intro -> App overgang */
     const intro = document.getElementById('intro');
     const appCard = document.getElementById('card');
 
@@ -451,69 +450,6 @@
     if (location.hash === '#brief') {
       setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 800);
     }
-
-    /* ======= Kalender (JS) ======= */
-    // Toon november van het huidige jaar en zet jouw events erin
-    (function renderCalendar(){
-      const now = new Date();
-      const year = now.getFullYear();
-      const monthIndex = 10; // 0-based: 10 = november
-      const first = new Date(year, monthIndex, 1);
-      const daysInMonth = 30; // november
-      // Maandag-start: JS getDay() geeft 0=zo..6=za -> herbereken naar ma=0..zo=6
-      const jsFirst = first.getDay(); // 0..6 (zo..za)
-      const offset = (jsFirst + 6) % 7; // maandag=0
-
-      document.getElementById('calMonth').textContent = 'November';
-      document.getElementById('calYear').textContent = year;
-
-      const grid = document.getElementById('calGrid');
-      grid.innerHTML = '';
-
-      const dows = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
-      dows.forEach(d => {
-        const el = document.createElement('div');
-        el.className = 'dow';
-        el.textContent = d;
-        grid.appendChild(el);
-      });
-
-      // lege cellen voor de uitlijning
-      for (let i=0;i<offset;i++){
-        const c = document.createElement('div');
-        c.className = 'cell empty';
-        grid.appendChild(c);
-      }
-
-      // events per dag (worden herhaald over meerdere dagen waar nodig)
-      const events = {
-        1: 'Weekendje Amsterdam',
-        2: 'Weekendje Amsterdam',
-        3: 'Kijken acteerkunsten Kiki',
-        7: 'Weekendje bij Tim thuis',
-        8: 'Weekendje bij Tim thuis',
-        9: 'Weekendje bij Tim thuis',
-      };
-
-      for (let day=1; day<=daysInMonth; day++){
-        const c = document.createElement('div');
-        c.className = 'cell';
-
-        const dn = document.createElement('div');
-        dn.className = 'day';
-        dn.textContent = day;
-        c.appendChild(dn);
-
-        if (events[day]){
-          const ev = document.createElement('div');
-          ev.className = 'event';
-          ev.textContent = events[day];
-          c.appendChild(ev);
-        }
-
-        grid.appendChild(c);
-      }
-    })();
   </script>
 </body>
 </html>
