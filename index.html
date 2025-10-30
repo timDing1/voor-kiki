@@ -72,6 +72,13 @@
     .badge { display:inline-flex; align-items:center; gap:8px; padding:.45rem .7rem; border:1px solid rgba(0,0,0,.08); border-radius:999px; background:rgba(255,255,255,.6) }
 
     .toast { position: fixed; left:50%; transform: translateX(-50%); bottom: 18px; background: var(--card); border: 1px solid rgba(0,0,0,.08); padding:.6rem 1rem; border-radius:999px; box-shadow: var(--shadow); z-index: 9; display:none }
+
+    /* Brief-styling */
+    .letter { line-height:1.75; font-size:1.02rem }
+    .letter h4 { margin: .2rem 0 0.6rem 0; font-size:1.1rem; color:var(--accent) }
+    .letter p { margin: .7rem 0 }
+    .letter .sign { margin-top: .8rem; color: var(--muted); font-style: italic }
+    .anchor { text-decoration: underline; cursor: pointer }
   </style>
 </head>
 <body>
@@ -99,6 +106,7 @@
             <button id="heartBtn" title="Laat wat liefde vallen">Laat harten vallen ❤️</button>
             <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
             <span class="chip badge" id="petname">Schatje 🐻</span>
+            <a class="chip anchor" href="#brief">Lees mijn brief 💌</a>
           </div>
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
@@ -141,6 +149,27 @@
             </ul>
           </details>
         </aside>
+
+        <!-- ====== JOUW BRIEF HIER ====== -->
+        <section class="panel letter" id="brief">
+          <h3 style="margin-top:0">Mijn brief aan jou</h3>
+          <h4>Aller allerliefste Kiki Dingewolfs,</h4>
+
+          <p>Ik denk dat ik alles al gezegd heb, maar je hebt vannacht nóg net even wat extra door mijn hoofd gespookt. Waarna ik vervolgens nu ben begonnen aan dit berichtje. Dus bij deze nogmaals, omdat ik het belangrijk vind dat je weet wat je voor mij betekent.</p>
+
+          <p>Ik vind het zo fijn om met je te zijn. Je brengt zo veel warmte en echt iets bijzonders.</p>
+
+          <p>De situatie is nou eenmaal lastig, toch geniet ik van wat we samen hebben. We hebben misschien ‘niets’, maar tegelijk voelt het als alles. We zijn geen ‘wij’ in woorden en in ons verstand, maar wel in gevoel.</p>
+
+          <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel wil ik je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
+          Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet ik wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
+
+          <p>Je verdient het mooiste Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
+
+          <p class="sign">— van mij, voor jou 💗</p>
+        </section>
+        <!-- ====== EINDE BRIEF ====== -->
+
       </main>
 
       <div class="footer">
@@ -164,7 +193,7 @@
     document.getElementById('year').textContent = new Date().getFullYear()
 
     // ======= Typewriter tekst =======
-    const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.`
+    const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.  \n\n<i>P.S. Klik op “Lees mijn brief 💌” hieronder.</i>`
     const typeEl = document.getElementById('type')
     let i = 0
     ;(function typeWriter(){
@@ -183,6 +212,11 @@
         setTimeout(typeWriter, 16)
       }
     })()
+
+    // ======= Smooth-Scroll naar de brief als #brief in de URL zit =======
+    if (location.hash === '#brief') {
+      setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 200)
+    }
 
     // ======= Floating hearts =======
     const bg = document.getElementById('bg')
@@ -260,6 +294,8 @@
     document.getElementById('openBtn').addEventListener('click', () => {
       kissRain()
       showToast('Kusjesregen! 😘')
+      // scrol ook even naar de brief
+      document.getElementById('brief')?.scrollIntoView({behavior:'smooth'})
     })
 
     function kissRain(){
