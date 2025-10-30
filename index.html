@@ -13,13 +13,10 @@
       --radius:18px;
       --glass: rgba(255,255,255,.08);
       --glass-border: rgba(255,255,255,.2);
-      /* clip origin voor de overgang */
       --cx: 50%;
       --cy: 50%;
-      --r: 150vmax; /* start-radius (groot; bedekt het scherm) */
+      --r: 150vmax;
     }
-
-    /* ====== BASE ====== */
     html,body{height:100%}
     body{
       margin:0;
@@ -31,12 +28,10 @@
     .hidden{opacity:0; pointer-events:none; transform: scale(.98); transition: opacity .6s ease, transform .6s ease}
     .show{opacity:1; transform: none}
 
-    /* ====== INTRO ====== */
+    /* INTRO */
     .intro{
       position:fixed; inset:0; display:grid; place-items:center; z-index:20;
       background: radial-gradient(ellipse at bottom, #0e1622 0%, #07080d 100%);
-      transition: opacity .6s ease;
-      /* STAR-WIPE: we knippen de intro weg vanaf klikpunt */
       clip-path: circle(var(--r) at var(--cx) var(--cy));
       transition: clip-path 900ms cubic-bezier(.2,.8,.2,1), opacity .6s ease;
     }
@@ -60,14 +55,10 @@
       transition: transform .15s ease; 
     }
     .intro .cta:hover{ transform: translateY(-2px) }
-    .intro .mini{
-      margin-top: .9rem; font-size:.92rem; color:#ffd6f3; font-style: italic;
-    }
+    .intro .mini{ margin-top:.9rem; font-size:.92rem; color:#ffd6f3; font-style: italic }
 
-    /* ====== STARS LAYERS ====== */
-    .stars, .stars2, .stars3{
-      position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
-    }
+    /* STARS */
+    .stars, .stars2, .stars3{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden }
     .stars span, .stars2 span, .stars3 span{
       position:absolute; border-radius:50%; background:#fff; opacity:.85;
       box-shadow: 0 0 6px 2px rgba(255,255,255,.65), 0 0 20px rgba(173,216,255,.35);
@@ -75,10 +66,7 @@
     }
     .stars2 span{ opacity:.9; box-shadow:0 0 8px 3px rgba(255,255,255,.7), 0 0 30px rgba(173,216,255,.45) }
     .stars3 span{ opacity:1; box-shadow:0 0 10px 4px rgba(255,255,255,.8), 0 0 40px rgba(255,200,250,.5) }
-    @keyframes twinkle{
-      from{ opacity:.5; transform: translateY(0) scale(.9) }
-      to{ opacity:1; transform: translateY(-2px) scale(1.15) }
-    }
+    @keyframes twinkle{ from{opacity:.5; transform: translateY(0) scale(.9)} to{opacity:1; transform: translateY(-2px) scale(1.15)} }
     .stars{ animation: drift1 60s linear infinite }
     .stars2{ animation: drift2 90s linear infinite }
     .stars3{ animation: drift3 120s linear infinite }
@@ -94,41 +82,26 @@
       animation: shoot 1.2s ease-out forwards;
       z-index:1; pointer-events:none;
     }
-    @keyframes shoot{
-      0%{ opacity:0; transform: translate(-10vw,-10vh) rotate(-20deg) scaleX(1) }
-      10%{ opacity:1 }
-      100%{ opacity:0; transform: translate(60vw, 40vh) rotate(-20deg) scaleX(40) }
-    }
+    @keyframes shoot{ 0%{opacity:0; transform: translate(-10vw,-10vh) rotate(-20deg) scaleX(1)} 10%{opacity:1} 100%{opacity:0; transform: translate(60vw, 40vh) rotate(-20deg) scaleX(40)} }
 
-    /* Burst-stars bij klik */
+    /* Burst stars */
     .burst-star{
       position: fixed; width:3px; height:3px; background:white; border-radius:50%;
       box-shadow: 0 0 6px 2px rgba(255,255,255,.7);
       animation: burst 700ms ease-out forwards;
       z-index: 25; pointer-events:none;
     }
-    @keyframes burst{
-      from{ opacity:1; transform: translate(0,0) scale(1) }
-      to{ opacity:0; transform: translate(var(--tx), var(--ty)) scale(0.5) }
-    }
+    @keyframes burst{ from{opacity:1; transform: translate(0,0) scale(1)} to{opacity:0; transform: translate(var(--tx), var(--ty)) scale(0.5)} }
 
-    /* ====== APP WRAPPER ====== */
+    /* APP */
     .wrap{ min-height:100dvh; display:grid; place-items:center; padding: clamp(16px, 4vw, 48px); position:relative; z-index:5 }
     .card{
-      width:min(920px, 100%);
-      background: var(--glass);
-      border:1px solid var(--glass-border);
-      border-radius: var(--radius);
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      backdrop-filter: blur(12px);
-      overflow:hidden;
-      opacity:0; transform: translateY(8px) scale(.985);
-      filter: blur(8px);
+      width:min(920px, 100%); background: var(--glass); border:1px solid var(--glass-border);
+      border-radius: var(--radius); box-shadow: 0 20px 60px rgba(0,0,0,.45); backdrop-filter: blur(12px);
+      overflow:hidden; opacity:0; transform: translateY(8px) scale(.985); filter: blur(8px);
       transition: opacity .6s ease, transform .6s ease, filter .6s ease;
     }
-    .card.app-enter{
-      opacity:1; transform:none; filter: blur(0);
-    }
+    .card.app-enter{ opacity:1; transform:none; filter: blur(0) }
     header{ padding:clamp(16px,3vw,28px) clamp(16px,4vw,40px); display:flex; align-items:center; gap:14px; border-bottom:1px dashed rgba(255,255,255,.15)}
     header .emoji{ font-size: clamp(34px, 5vw, 50px) }
     header h1{ margin:0; font-size:clamp(22px,4.5vw,34px) }
@@ -162,7 +135,7 @@
     .secret{ display:none; margin-top:10px; font-size:1.05rem }
     .toast{ position: fixed; left:50%; transform: translateX(-50%); bottom: 18px; background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); padding:.6rem 1rem; border-radius:999px; box-shadow: 0 10px 30px rgba(0,0,0,.4); z-index: 9; display:none; color:white }
 
-    /* Brief-styling */
+    /* Brief */
     .letter{ line-height:1.75; font-size:1.02rem }
     .letter h4{ margin:.2rem 0 .6rem 0; font-size:1.1rem; color:#ffd6f3 }
     .letter p{ margin:.7rem 0 }
@@ -173,7 +146,7 @@
   </style>
 </head>
 <body>
-  <!-- INTRO / STARTPAGINA -->
+  <!-- INTRO -->
   <div class="intro show" id="intro">
     <div class="stars" id="stars_i"></div>
     <div class="stars2" id="stars2_i"></div>
@@ -186,7 +159,7 @@
     </div>
   </div>
 
-  <!-- STAR FIELDS (achtergrond van de app) -->
+  <!-- STARS -->
   <div class="stars" id="stars"></div>
   <div class="stars2" id="stars2"></div>
   <div class="stars3" id="stars3"></div>
@@ -213,8 +186,9 @@
           <p class="sterrenquote">✨ Weet je wat het mooiste is? Dat onze sterren precies op de juiste plek staan. ✨</p>
 
           <div class="btns">
-            <button class="primary" id="openBtn">Open je cadeautje 🎁</button>
-            <button id="heartBtn" title="Laat wat liefde vallen">Laat harten vallen ❤️</button>
+            <!-- AANGEPAST: tekst van de knop -->
+            <button class="primary" id="openBtn">Ontvang kusjes 💋</button>
+            <!-- VERWIJDERD: de 'Laat harten vallen ❤️'-knop -->
             <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
             <span class="chip" id="petname">Schatje 🐻</span>
           </div>
@@ -290,7 +264,7 @@
   <div class="toast" id="toast">Geheime mode geactiveerd 😎</div>
 
   <script>
-    /* ========= Personalisatie ========= */
+    /* Personalisatie */
     const params = new URLSearchParams(location.search);
     const naamParam = params.get('naam');
     if (naamParam) {
@@ -300,10 +274,10 @@
       document.title = `Voor ${n} 💫`;
     }
 
-    /* ========= Jaar ========= */
+    /* Jaar */
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    /* ========= Typewriter ========= */
+    /* Typewriter */
     const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.`;
     const typeEl = document.getElementById('type');
     let i = 0;
@@ -323,7 +297,7 @@
       }
     })();
 
-    /* ========= Stars: seeds ========= */
+    /* Stars seeding */
     function seedStars(container, count, sizeMin=1, sizeMax=2.2){
       for(let i=0;i<count;i++){
         const s=document.createElement('span');
@@ -343,7 +317,7 @@
     seedStars(document.getElementById('stars2_i'), 40, 1.2, 2.4);
     seedStars(document.getElementById('stars3_i'), 25, 1.6, 3);
 
-    /* Shooting stars (af en toe eentje) */
+    /* Shooting stars */
     function shootingStar(){
       const s = document.createElement('div');
       s.className='streak';
@@ -354,7 +328,7 @@
     }
     setInterval(()=> { if (Math.random() < 0.6) shootingStar() }, 3500);
 
-    /* ========= Hearts ========= */
+    /* Hearts */
     const bg = document.getElementById('bg');
     function dropHearts(count = 18) {
       for (let j = 0; j < count; j++) {
@@ -369,14 +343,13 @@
         setTimeout(() => span.remove(), 7000);
       }
     }
-    // zachte ambient hearts start pas NA intro
+    // Ambient hearts starten na intro
     let ambientHearts;
     function startAmbientHearts(){ ambientHearts = setInterval(()=> dropHearts(2), 2600) }
     function stopAmbientHearts(){ clearInterval(ambientHearts) }
 
-    /* ========= Buttons ========= */
-    document.getElementById('heartBtn').addEventListener('click', () => dropHearts(30));
-
+    /* Buttons */
+    // VERWIJDERD: document.getElementById('heartBtn')... (bestond niet meer)
     const secret = document.getElementById('secret');
     document.getElementById('secretBtn').addEventListener('click', () => {
       secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
@@ -388,11 +361,11 @@
       pet.textContent = pets[Math.floor(Math.random()*pets.length)];
     });
 
-    /* ========= Toast ========= */
+    /* Toast */
     const toast = document.getElementById('toast');
     function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 2200) }
 
-    /* ========= Konami ========= */
+    /* Konami */
     const K = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
     let buffer = [];
     window.addEventListener('keydown', (e) => {
@@ -410,7 +383,7 @@
       }
     });
 
-    /* ========= Cadeautje-knop ========= */
+    /* Ontvang kusjes (voorheen: Open je cadeautje) */
     function kissRain(){
       for (let i=0;i<42;i++){
         const s = document.createElement('span');
@@ -436,18 +409,17 @@
       document.getElementById('brief')?.scrollIntoView({behavior:'smooth'});
     });
 
-    /* ========= Intro -> App overgang met STAR-WIPE ========= */
+    /* Intro -> App overgang */
     const intro = document.getElementById('intro');
     const appCard = document.getElementById('card');
 
-    // Klein sterretjes-burst op klikpunt
     function burst(x,y){
       const N = 18;
       for(let i=0;i<N;i++){
         const b = document.createElement('div');
         b.className='burst-star';
         const a = (Math.PI*2) * (i/N) + Math.random()*0.7;
-        const d = 30 + Math.random()*70; // afstand in px
+        const d = 30 + Math.random()*70;
         b.style.left = (x) + 'px';
         b.style.top  = (y) + 'px';
         b.style.setProperty('--tx', `${Math.cos(a)*d}px`);
@@ -458,35 +430,24 @@
     }
 
     document.getElementById('startBtn').addEventListener('click', (e) => {
-      // Bepaal klikpositie (fallback: center)
       const rect = intro.getBoundingClientRect();
       const x = e.clientX || (rect.left + rect.width/2);
       const y = e.clientY || (rect.top + rect.height/2);
-
-      // Zet CSS-variabelen voor clip-path centrum
       intro.style.setProperty('--cx', x + 'px');
       intro.style.setProperty('--cy', y + 'px');
-
-      // Burst en shooting star voor extra flair
       burst(x,y);
       shootingStar();
-
-      // Start de clip animatie
       intro.classList.add('explode');
 
-      // Laat de card mooi binnenkomen net voordat de intro klaar is
       setTimeout(()=> {
         appCard.classList.add('app-enter');
         showToast('De sterren staan goed ✨');
-        // start ambient hearts iets later
         setTimeout(()=> startAmbientHearts(), 600);
-      }, 300); // card begint iets eerder zodat het “onder” de cirkel al leeft
+      }, 300);
 
-      // Verwijder intro helemaal als de animatie klaar is
       setTimeout(()=> { intro.style.display='none'; }, 950);
     });
 
-    // Als iemand direct met #brief binnenkomt
     if (location.hash === '#brief') {
       setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 800);
     }
