@@ -139,6 +139,27 @@
     .letter .sign{ margin-top:.8rem; color: var(--muted); font-style: italic }
 
     .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top:.8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
+
+    /* ===== Kalender (maandgrid) ===== */
+    .cal{ display:grid; gap:.7rem; margin-top:.8rem }
+    .cal .cal-head{ display:flex; justify-content:space-between; align-items:baseline }
+    .cal .month{ font-weight:800; }
+    .cal .year{ color:var(--muted); font-weight:600 }
+    .cal .grid{ display:grid; grid-template-columns: repeat(7, 1fr); gap:6px }
+    .cal .dow{ text-align:center; font-size:.85rem; color:var(--muted); padding:.25rem 0 }
+    .cal .cell{
+      min-height:78px; padding:.55rem .6rem; border-radius:10px;
+      background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15);
+      display:flex; flex-direction:column; gap:.35rem;
+    }
+    .cal .day{ font-weight:800; font-size:.9rem; opacity:.95 }
+    .cal .event{
+      font-size:.82rem; line-height:1.2;
+      padding:.3rem .45rem; border-radius:8px;
+      background: linear-gradient(180deg, rgba(255,219,230,.85), rgba(255,197,215,.8));
+      color:#7b1233; font-weight:700; box-shadow: inset 0 -2px 0 rgba(0,0,0,.05);
+    }
+    .cal .empty{ background: transparent; border:1px dashed rgba(255,255,255,.12) }
     @keyframes fadein{ from{opacity:0} to{opacity:1} }
   </style>
 </head>
@@ -190,7 +211,7 @@
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
 
-        <!-- KLEINE EXTRA'S (vernieuwd) -->
+        <!-- KLEINE EXTRA'S -->
         <aside class="panel">
           <h3 style="margin-top:0">Kleine extra's</h3>
 
@@ -205,34 +226,18 @@
             </ul>
           </details>
 
-          <!-- Onze agenda -->
+          <!-- Onze agenda: kalendergrid -->
           <details style="margin-top:12px" open>
             <summary>Onze agenda 📅</summary>
-
-            <form id="agendaForm" style="display:grid; gap:.6rem; margin-top:.8rem">
-              <div style="display:grid; gap:.4rem">
-                <label for="agendaDate" class="muted">Datum</label>
-                <input id="agendaDate" type="date" required
-                       style="padding:.55rem .7rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#fff">
+            <div class="cal" id="cal">
+              <div class="cal-head">
+                <div class="month" id="calMonth">November</div>
+                <div class="year" id="calYear"></div>
               </div>
-
-              <div style="display:grid; gap:.4rem">
-                <label for="agendaTitle" class="muted">Titel</label>
-                <input id="agendaTitle" type="text" required placeholder="Bijv. Sterren kijken op het strand"
-                       style="padding:.55rem .7rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#fff">
+              <div class="grid" id="calGrid">
+                <!-- JS vult hier de dagen -->
               </div>
-
-              <div style="display:grid; gap:.4rem">
-                <label for="agendaNote" class="muted">Notitie (optioneel)</label>
-                <textarea id="agendaNote" rows="2" placeholder="Neem dekentje mee ☺️"
-                          style="padding:.55rem .7rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#fff"></textarea>
-              </div>
-
-              <button type="submit" class="good" style="width:max-content">+ Voeg toe</button>
-            </form>
-
-            <div id="agendaEmpty" class="muted" style="margin-top:.9rem">Nog niets gepland — voeg iets leuks toe ✨</div>
-            <ul id="agendaList" style="list-style:none; padding:0; margin:.8rem 0 0 0; display:grid; gap:.6rem"></ul>
+            </div>
           </details>
         </aside>
 
@@ -346,7 +351,6 @@
     }
     let ambientHearts;
     function startAmbientHearts(){ ambientHearts = setInterval(()=> dropHearts(2), 2600) }
-    function stopAmbientHearts(){ clearInterval(ambientHearts) }
 
     /* Buttons */
     const secret = document.getElementById('secret');
@@ -402,9 +406,7 @@
     }
     document.getElementById('openBtn').addEventListener('click', () => {
       kissRain();
-      // dropHearts(20); // optioneel extra hartjes
       showToast('Kusjesregen! 😘');
-      // geen auto-scroll
     });
 
     /* Intro -> App overgang (star-wipe) */
@@ -450,98 +452,68 @@
       setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 800);
     }
 
-    /* ======= Onze agenda (localStorage) ======= */
-    const AGENDA_KEY = 'agendaItems_v1';
+    /* ======= Kalender (JS) ======= */
+    // Toon november van het huidige jaar en zet jouw events erin
+    (function renderCalendar(){
+      const now = new Date();
+      const year = now.getFullYear();
+      const monthIndex = 10; // 0-based: 10 = november
+      const first = new Date(year, monthIndex, 1);
+      const daysInMonth = 30; // november
+      // Maandag-start: JS getDay() geeft 0=zo..6=za -> herbereken naar ma=0..zo=6
+      const jsFirst = first.getDay(); // 0..6 (zo..za)
+      const offset = (jsFirst + 6) % 7; // maandag=0
 
-    function loadAgenda(){
-      try { return JSON.parse(localStorage.getItem(AGENDA_KEY)) || []; }
-      catch { return []; }
-    }
-    function saveAgenda(items){
-      localStorage.setItem(AGENDA_KEY, JSON.stringify(items));
-    }
-    function escapeHTML(str){
-      return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m]);
-    }
-    function formatDateNL(s){
-      if (!s) return '';
-      const d = new Date(s + 'T00:00:00');
-      return d.toLocaleDateString('nl-NL', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    }
-    function renderAgenda(){
-      const listEl = document.getElementById('agendaList');
-      const emptyEl = document.getElementById('agendaEmpty');
-      if (!listEl || !emptyEl) return;
+      document.getElementById('calMonth').textContent = 'November';
+      document.getElementById('calYear').textContent = year;
 
-      let items = loadAgenda();
-      items.sort((a,b) => (a.date || '').localeCompare(b.date || ''));
+      const grid = document.getElementById('calGrid');
+      grid.innerHTML = '';
 
-      listEl.innerHTML = '';
-      if (items.length === 0){
-        emptyEl.style.display = 'block';
-        return;
+      const dows = ['Ma','Di','Wo','Do','Vr','Za','Zo'];
+      dows.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'dow';
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+
+      // lege cellen voor de uitlijning
+      for (let i=0;i<offset;i++){
+        const c = document.createElement('div');
+        c.className = 'cell empty';
+        grid.appendChild(c);
       }
-      emptyEl.style.display = 'none';
 
-      let currentDate = '';
-      items.forEach((it, idx) => {
-        if (it.date !== currentDate){
-          currentDate = it.date;
-          const header = document.createElement('li');
-          header.innerHTML = `<div style="margin-top:.4rem; font-weight:700">${formatDateNL(currentDate)}</div>`;
-          listEl.appendChild(header);
+      // events per dag (worden herhaald over meerdere dagen waar nodig)
+      const events = {
+        1: 'Weekendje Amsterdam',
+        2: 'Weekendje Amsterdam',
+        3: 'Kijken acteerkunsten Kiki',
+        7: 'Weekendje bij Tim thuis',
+        8: 'Weekendje bij Tim thuis',
+        9: 'Weekendje bij Tim thuis',
+      };
+
+      for (let day=1; day<=daysInMonth; day++){
+        const c = document.createElement('div');
+        c.className = 'cell';
+
+        const dn = document.createElement('div');
+        dn.className = 'day';
+        dn.textContent = day;
+        c.appendChild(dn);
+
+        if (events[day]){
+          const ev = document.createElement('div');
+          ev.className = 'event';
+          ev.textContent = events[day];
+          c.appendChild(ev);
         }
-        const li = document.createElement('li');
-        li.style.border = '1px solid rgba(255,255,255,.18)';
-        li.style.borderRadius = '10px';
-        li.style.padding = '.6rem .75rem';
-        li.style.background = 'rgba(255,255,255,.06)';
-        li.innerHTML = `
-          <div style="display:flex; justify-content:space-between; gap:.6rem; align-items:center">
-            <div>
-              <div style="font-weight:700">${escapeHTML(it.title)}</div>
-              ${it.note ? `<div class="muted" style="margin-top:.2rem">${escapeHTML(it.note)}</div>` : ''}
-            </div>
-            <button data-idx="${idx}" class="chip" title="Verwijderen">Verwijder</button>
-          </div>
-        `;
-        listEl.appendChild(li);
-      });
 
-      listEl.querySelectorAll('button[data-idx]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const idx = Number(e.currentTarget.getAttribute('data-idx'));
-          const items = loadAgenda();
-          items.splice(idx, 1);
-          saveAgenda(items);
-          renderAgenda();
-        });
-      });
-    }
-
-    const agendaForm = document.getElementById('agendaForm');
-    if (agendaForm){
-      agendaForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const date = document.getElementById('agendaDate').value;
-        const title = document.getElementById('agendaTitle').value.trim();
-        const note  = document.getElementById('agendaNote').value.trim();
-        if (!date || !title) return;
-
-        const items = loadAgenda();
-        items.push({ date, title, note });
-        saveAgenda(items);
-
-        agendaForm.reset();
-        renderAgenda();
-        if (typeof showToast === 'function') showToast('Toegevoegd aan onze agenda ✨');
-      });
-
-      const today = new Date();
-      document.getElementById('agendaDate').value = today.toISOString().slice(0,10);
-    }
-
-    renderAgenda();
+        grid.appendChild(c);
+      }
+    })();
   </script>
 </body>
 </html>
