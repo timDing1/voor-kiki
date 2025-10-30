@@ -114,6 +114,7 @@
     .muted{ color:var(--muted) }
 
     .btns{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
+    .btns-center{ justify-content:center } /* <-- nieuw voor centreren van CTA-knoppen */
     button, .chip{
       appearance:none; border:none; padding:.7rem 1rem; border-radius:12px; background:#f5f6f7; color:#111;
       cursor:pointer; font-weight:700; box-shadow: inset 0 -2px 0 rgba(0,0,0,.05); transition:.2s transform,.2s filter
@@ -199,11 +200,12 @@
           </p>
           <p class="sterrenquote">✨✨</p>
 
-          <div class="btns">
+          <!-- Knoppen gecentreerd, petname-chip verwijderd -->
+          <div class="btns btns-center" id="ctaBtns">
             <button class="primary" id="openBtn">Ontvang kusjes 💋</button>
             <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
-            <span class="chip" id="petname">Schatje 🐻</span>
           </div>
+
           <p class="secret" id="secret">Een dergelijk iets was dus een ideetje dat ik een keer wilde maken voor je, maar ik vind dat je dit vandaag verdient</p>
         </section>
 
@@ -353,12 +355,6 @@
     const secret = document.getElementById('secret');
     document.getElementById('secretBtn').addEventListener('click', () => {
       secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
-    });
-
-    const pet = document.getElementById('petname');
-    const pets = ['Schatje 🐻','Lieve jij ✨','Lieverd 🌷','Knappe jij 🦊','Mijn favoriet 💫'];
-    pet.addEventListener('click', () => {
-      pet.textContent = pets[Math.floor(Math.random()*pets.length)];
     });
 
     /* Toast */
