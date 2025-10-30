@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Voor jou 💫</title>
   <meta name="description" content="Een kleine, lieve, interactieve liefdesbrief als webapp 😘" />
+  <meta name="theme-color" content="#0e1622" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>💌</text></svg>">
   <style>
     :root{
       --text:#f9fafb;
@@ -27,6 +29,10 @@
     }
     .hidden{opacity:0; pointer-events:none; transform: scale(.98); transition: opacity .6s ease, transform .6s ease}
     .show{opacity:1; transform: none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* Reduced motion toggle */
+    .reduce-motion *{ animation: none !important; transition: none !important; }
 
     /* INTRO */
     .intro{
@@ -65,7 +71,7 @@
       animation: twinkle 4s ease-in-out infinite alternate;
     }
     .stars2 span{ opacity:.9; box-shadow:0 0 8px 3px rgba(255,255,255,.7), 0 0 30px rgba(173,216,255,.45) }
-    .stars3 span{ opacity:1; box-shadow:0 0 10px 4px rgba(255,255,255,.8), 0 0 40px rgba(255,200,250,.5) }
+    .stars3 span{ opacity:1; box-shadow: 0 0 10px 4px rgba(255,255,255,.8), 0 0 40px rgba(255,200,250,.5) }
     @keyframes twinkle{ from{opacity:.5; transform: translateY(0) scale(.9)} to{opacity:1; transform: translateY(-2px) scale(1.15)} }
     .stars{ animation: drift1 60s linear infinite }
     .stars2{ animation: drift2 90s linear infinite }
@@ -114,7 +120,7 @@
     .muted{ color:var(--muted) }
 
     .btns{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
-    .btns-center{ justify-content:center } /* <-- nieuw voor centreren van CTA-knoppen */
+    .btns-center{ justify-content:center }
     button, .chip{
       appearance:none; border:none; padding:.7rem 1rem; border-radius:12px; background:#f5f6f7; color:#111;
       cursor:pointer; font-weight:700; box-shadow: inset 0 -2px 0 rgba(0,0,0,.05); transition:.2s transform,.2s filter
@@ -156,87 +162,78 @@
   </style>
 </head>
 <body>
+  <a class="sr-only" href="#main">Direct naar inhoud</a>
   <!-- INTRO -->
-  <div class="intro show" id="intro">
-    <div class="stars" id="stars_i"></div>
-    <div class="stars2" id="stars2_i"></div>
-    <div class="stars3" id="stars3_i"></div>
-    <div class="box">
-      <h1>Goedemorgen, <span id="introNaam">lieve Kiki</span> ✨</h1>
-      <p>Ik kan helaas niet naar je toe komen, maar wel iets naar je toe sturen.</p>
-      <p class="mini">Wakker worden onder deze digitale sterren, die ikzelf op de juiste plek heb gezet</p>
-      <button class="cta" id="startBtn">Klik NU, doe dan</button>
+  <div class="intro show" id="intro" aria-labelledby="introTitle" aria-describedby="introDesc">
+    <div class="stars" id="stars_i" aria-hidden="true"></div>
+    <div class="stars2" id="stars2_i" aria-hidden="true"></div>
+    <div class="stars3" id="stars3_i" aria-hidden="true"></div>
+    <div class="box" role="dialog" aria-modal="true">
+      <h1 id="introTitle">Goedemorgen, <span id="introNaam">lieve Kiki</span> ✨</h1>
+      <p id="introDesc">Ik kan helaas niet naar je toe komen, maar wel iets naar je toe sturen.</p>
+      <p class="mini">Wakker worden onder deze digitale sterren, die ik zelf op de juiste plek heb gezet</p>
+      <button class="cta" id="startBtn" aria-controls="app">Klik NU, doe dan</button>
     </div>
   </div>
 
   <!-- STARS -->
-  <div class="stars" id="stars"></div>
-  <div class="stars2" id="stars2"></div>
-  <div class="stars3" id="stars3"></div>
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <div class="stars2" id="stars2" aria-hidden="true"></div>
+  <div class="stars3" id="stars3" aria-hidden="true"></div>
 
   <!-- Hearts layer -->
   <div class="bg" id="bg" aria-hidden="true"></div>
 
   <!-- APP -->
   <div class="wrap" id="app">
-    <article class="card" id="card" role="main">
+    <article class="card" id="card" role="main" aria-live="polite">
       <header>
-        <div class="emoji">💌</div>
+        <div class="emoji" aria-hidden="true">💌</div>
         <div>
-          <h1>
-            Voor <span id="naam">jou</span>
-            <small class="muted">(aka Ding, schatje, sletje en alles daartussen)</small>
-          </h1>
+          <h1 id="main">Voor <span id="naam">jou</span> <small class="muted">(aka Ding, schatje, sletje en alles daartussen)</small></h1>
         </div>
       </header>
 
       <main>
         <section class="panel" aria-live="polite">
-          <!-- Statisch, geen typewriter-animatie -->
           <p class="type" id="type">
             Hey <strong id="typeName">Kiki</strong> 🫶<br/><br/>
-            Geen fysiek cadeautje, je favoritie chocolade of een mislukte poging om iets als verassing bij je thuis te laten komen. Dit keer een digitaal gemaakt stukje liefde, waarvan ik zeker weet dat die aankomt :)<br/><br/>
+            Geen fysiek cadeautje, je favoriete chocolade of een mislukte poging om iets als verrassing bij je thuis te laten komen. Dit keer een digitaal gemaakt stukje liefde, waarvan ik zeker weet dat het aankomt 🙂<br/><br/>
             Het is niet uitgebreid, maar wel speciaal voor jou gebouwd. De eerste stap naar de machine om de tijd stil te kunnen zetten.
           </p>
-          <p class="sterrenquote">✨✨</p>
+          <p class="sterrenquote" aria-live="polite">✨✨</p>
 
-          <!-- Knoppen gecentreerd, petname-chip verwijderd -->
           <div class="btns btns-center" id="ctaBtns">
             <button class="primary" id="openBtn">Ontvang kusjes 💋</button>
-            <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
+            <button class="good" id="secretBtn" title="pssst" aria-expanded="false" aria-controls="secret">Geheime boodschap 🔐</button>
+            <button class="chip" id="shareBtn" title="Deel deze pagina">Delen ↗︎</button>
           </div>
 
           <p class="secret" id="secret">Een dergelijk iets was dus een ideetje dat ik een keer wilde maken voor je, maar ik vind dat je dit vandaag verdient.</p>
         </section>
 
-        <!-- KLEINE EXTRA'S (standaard gesloten) -->
-        <aside class="panel" id="extras">
+        <!-- KLEINE EXTRA'S -->
+        <aside class="panel" id="extras" aria-label="Kleine extra's">
           <h3 style="margin-top:0">Kleine extra's</h3>
 
-          <!-- ONZE PLAYLIST (alleen officiële embeds) -->
           <details>
             <summary>Onze playlist 🎵</summary>
             <div class="players-wrap">
-              <!-- Stop De Tijd -->
               <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0Q6PoJX8JWndVLcJnM1BLX"
                 width="100%" height="152" frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-              <!-- Zij Laat Me Praten -->
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Stop De Tijd"></iframe>
               <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/25cvMotloW6bJCSP0hKG59"
                 width="100%" height="152" frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-              <!-- Zoveel Liefde -->
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Zij Laat Me Praten"></iframe>
               <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4osLdgj5ToLMc8EovfWFjx"
                 width="100%" height="152" frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-              <!-- Platonisch -->
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Zoveel Liefde"></iframe>
               <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6Mwcn4IEsarl0gDqJ29XFy"
                 width="100%" height="152" frameborder="0"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Platonisch"></iframe>
             </div>
           </details>
 
-          <!-- ONZE AGENDA (statisch, geen opslag) -->
           <details>
             <summary>Onze agenda 📅</summary>
             <ul style="list-style:none; padding-left:0; margin:.6rem 0 0 0">
@@ -254,23 +251,28 @@
               </li>
             </ul>
           </details>
+
+          <details>
+            <summary>Instellingen ⚙️</summary>
+            <label style="display:flex;align-items:center;gap:.6rem"><input type="checkbox" id="rmToggle"> Minder animatie (rustige modus)</label>
+          </details>
         </aside>
 
         <!-- BRIEF -->
         <section class="panel letter" id="brief">
           <h3 style="margin-top:0">Speciaal voor vandaag</h3>
-          <h4>Aller allerliefste Kiki Dingewolfs,</h4>
+          <h4>Aller-allerliefste Kiki Dingewolfs,</h4>
 
           <p>Ik denk dat ik alles al gezegd heb, maar je hebt vannacht nóg net even wat extra door mijn hoofd gespookt. Waarna ik vervolgens nu ben begonnen aan dit berichtje. Dus bij deze nogmaals, omdat ik het belangrijk vind dat je weet wat je voor mij betekent.</p>
 
-          <p>Ik vind het zo fijn om met je te zijn. Je brengt zo veel warmte en echt iets bijzonders.</p>
+          <p>Ik vind het zo fijn om met je te zijn. Je brengt zoveel warmte en echt iets bijzonders.</p>
 
           <p>De situatie is nou eenmaal lastig, toch geniet ik van wat we samen hebben. We hebben misschien ‘niets’, maar tegelijk voelt het als alles. We zijn geen ‘wij’ in woorden en in ons verstand, maar wel in gevoel.</p>
 
-          <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel wil ik je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
-          Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet ik wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
+          <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel: ik wil je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
+          Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet in wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
 
-          <p>Je verdient het mooiste Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
+          <p>Je verdient het mooiste, Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
 
           <p class="sign">— van mij, voor jou 💗</p>
         </section>
@@ -283,7 +285,7 @@
     </article>
   </div>
 
-  <div class="toast" id="toast">Geheime mode geactiveerd 😎</div>
+  <div class="toast" id="toast" role="status" aria-live="assertive">Geheime mode geactiveerd 😎</div>
 
   <script>
     /* Personalisatie */
@@ -295,6 +297,17 @@
       document.getElementById('introNaam').textContent = n;
       document.getElementById('typeName').textContent = n;
       document.title = `Voor ${n} 💫`;
+      try { localStorage.setItem('naam', n); } catch {}
+    } else {
+      try {
+        const saved = localStorage.getItem('naam');
+        if (saved) {
+          document.getElementById('naam').textContent = saved;
+          document.getElementById('introNaam').textContent = saved;
+          document.getElementById('typeName').textContent = saved;
+          document.title = `Voor ${saved} 💫`;
+        }
+      } catch {}
     }
 
     /* Jaar */
@@ -321,6 +334,7 @@
     seedStars(document.getElementById('stars3_i'), 25, 1.6, 3);
 
     /* Shooting stars */
+    let shootTimer;
     function shootingStar(){
       const s = document.createElement('div');
       s.className='streak';
@@ -329,7 +343,11 @@
       document.body.appendChild(s);
       setTimeout(()=> s.remove(), 1300);
     }
-    setInterval(()=> { if (Math.random() < 0.6) shootingStar() }, 3500);
+    function startShooting(){
+      stopShooting();
+      shootTimer = setInterval(()=> { if (Math.random() < 0.6) shootingStar() }, 3500);
+    }
+    function stopShooting(){ if (shootTimer) clearInterval(shootTimer); }
 
     /* Hearts */
     const bg = document.getElementById('bg');
@@ -346,15 +364,18 @@
         setTimeout(() => span.remove(), 7000);
       }
     }
-    // Ambient hearts starten na intro
+    // Ambient hearts na intro
     let ambientHearts;
     function startAmbientHearts(){ ambientHearts = setInterval(()=> dropHearts(2), 2600) }
     function stopAmbientHearts(){ clearInterval(ambientHearts) }
 
     /* Buttons */
     const secret = document.getElementById('secret');
-    document.getElementById('secretBtn').addEventListener('click', () => {
-      secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
+    const secretBtn = document.getElementById('secretBtn');
+    secretBtn.addEventListener('click', () => {
+      const shown = secret.style.display === 'block';
+      secret.style.display = shown ? 'none' : 'block';
+      secretBtn.setAttribute('aria-expanded', String(!shown));
     });
 
     /* Toast */
@@ -381,7 +402,8 @@
 
     /* Ontvang kusjes */
     function kissRain(){
-      for (let i=0;i<42;i++){
+      const total = document.body.classList.contains('reduce-motion') ? 12 : 42;
+      for (let i=0;i<total;i++){
         const s = document.createElement('span');
         s.textContent = Math.random()>0.5 ? '💋' : '😘';
         s.style.position='fixed';
@@ -402,6 +424,19 @@
       kissRain();
       dropHearts(20);
       showToast('Kusjesregen! 😘');
+      try { navigator.vibrate?.(50); } catch {}
+    });
+
+    /* Delen */
+    document.getElementById('shareBtn').addEventListener('click', async () => {
+      const title = document.title;
+      const text = 'Voor jou 💫 — een kleine digitale liefdesbrief';
+      const url = location.href;
+      if (navigator.share) {
+        try { await navigator.share({title, text, url}); } catch {}
+      } else {
+        try { await navigator.clipboard.writeText(url); showToast('Link gekopieerd 📋'); } catch { showToast('Kon link niet kopiëren'); }
+      }
     });
 
     /* Intro -> App overgang */
@@ -424,7 +459,8 @@
       }
     }
 
-    document.getElementById('startBtn').addEventListener('click', (e) => {
+    const startBtn = document.getElementById('startBtn');
+    startBtn.addEventListener('click', (e) => {
       const rect = intro.getBoundingClientRect();
       const x = e.clientX || (rect.left + rect.width/2);
       const y = e.clientY || (rect.top + rect.height/2);
@@ -436,11 +472,42 @@
 
       setTimeout(()=> {
         appCard.classList.add('app-enter');
-        setTimeout(()=> startAmbientHearts(), 600);
+        document.getElementById('main').focus?.();
+        if (!document.body.classList.contains('reduce-motion')) {
+          setTimeout(()=> startAmbientHearts(), 600);
+          startShooting();
+        }
       }, 300);
 
       setTimeout(()=> { intro.style.display='none'; }, 950);
     });
+
+    // Focus op startknop bij laden
+    window.addEventListener('load', () => startBtn.focus());
+
+    // Pagina-visibility: pauzeer animatie-intervals
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { stopAmbientHearts(); stopShooting(); }
+      else if (!document.body.classList.contains('reduce-motion')) { startAmbientHearts(); startShooting(); }
+    });
+
+    // Reduced motion: toggle + respect user setting
+    const rmToggle = document.getElementById('rmToggle');
+    function applyReducedMotion(on){
+      document.body.classList.toggle('reduce-motion', !!on);
+      try { localStorage.setItem('reducedMotion', on ? '1' : '0'); } catch {}
+      if (on) { stopAmbientHearts(); stopShooting(); }
+      else if (!document.hidden) { startAmbientHearts(); startShooting(); }
+    }
+    (function initRM(){
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let val = '0';
+      try { val = localStorage.getItem('reducedMotion') ?? (mq.matches ? '1' : '0'); } catch { val = mq.matches ? '1' : '0'; }
+      rmToggle.checked = val === '1';
+      applyReducedMotion(val === '1');
+      mq.addEventListener?.('change', (e)=>{ if (!localStorage.getItem('reducedMotion')) applyReducedMotion(e.matches); });
+    })();
+    rmToggle.addEventListener('change', (e)=> applyReducedMotion(e.target.checked));
 
     if (location.hash === '#brief') {
       setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 800);
