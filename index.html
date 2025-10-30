@@ -123,9 +123,6 @@
     .good{ background: linear-gradient(180deg, #dcffe6, #bff5d7); color:#0e6b4b }
     .chip{ font-size:.85rem }
 
-    details{ border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:.7rem 1rem; color:#fff }
-    details[open]{ background: rgba(255,255,255,.05) }
-
     .footer{ padding: 8px 18px 24px; text-align:center; color:var(--muted) }
 
     /* Hearts */
@@ -141,7 +138,7 @@
     .letter p{ margin:.7rem 0 }
     .letter .sign{ margin-top:.8rem; color: var(--muted); font-style: italic }
 
-    .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top: .8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
+    .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top:.8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
     @keyframes fadein{ from{opacity:0} to{opacity:1} }
   </style>
 </head>
@@ -186,51 +183,56 @@
           <p class="sterrenquote">✨ Weet je wat het mooiste is? Dat onze sterren precies op de juiste plek staan. ✨</p>
 
           <div class="btns">
-            <!-- AANGEPAST: tekst van de knop -->
             <button class="primary" id="openBtn">Ontvang kusjes 💋</button>
-            <!-- VERWIJDERD: de 'Laat harten vallen ❤️'-knop -->
             <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
             <span class="chip" id="petname">Schatje 🐻</span>
           </div>
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
 
+        <!-- KLEINE EXTRA'S (vernieuwd) -->
         <aside class="panel">
           <h3 style="margin-top:0">Kleine extra's</h3>
-          <details>
-            <summary>Inside jokes 😂</summary>
-            <ul>
-              <li>TODO: Vervang met jullie grap #1</li>
-              <li>TODO: Vervang met jullie grap #2</li>
-              <li>TODO: Vervang met jullie grap #3</li>
+
+          <!-- Onze playlist -->
+          <details open>
+            <summary>Onze playlist 🎶</summary>
+            <ul style="margin:.6rem 0 0 0; padding-left:1rem; line-height:1.7">
+              <li><a href="https://open.spotify.com/search/Stop%20De%20Tijd%20Marco%20Borsato" target="_blank" rel="noopener">Stop De Tijd — Marco Borsato</a></li>
+              <li><a href="https://open.spotify.com/search/Zij%20Laat%20Me%20Praten%20Acda%20en%20de%20Munnik" target="_blank" rel="noopener">Zij Laat Me Praten — Acda en de Munnik</a></li>
+              <li><a href="https://open.spotify.com/search/Zoveel%20Liefde%20Tommie%20Christiaan" target="_blank" rel="noopener">Zoveel Liefde — Tommie Christiaan</a></li>
+              <li><a href="https://open.spotify.com/search/Platonisch%20Noor" target="_blank" rel="noopener">Platonisch — Noor</a></li>
             </ul>
           </details>
 
-          <details>
-            <summary>Hoeveel geef ik om je? 💖</summary>
-            <div class="meter">
-              <input type="range" min="0" max="100" value="99" id="slider" />
-              <output id="loveOut">99%</output>
-            </div>
-          </details>
+          <!-- Onze agenda -->
+          <details style="margin-top:12px" open>
+            <summary>Onze agenda 📅</summary>
 
-          <details>
-            <summary>Kleine quiz 📚</summary>
-            <p class="muted">Wat is mijn favoriete ding aan jou?</p>
-            <div class="btns">
-              <button class="chip">Je humor</button>
-              <button class="chip">Je ogen</button>
-              <button class="chip">Alles (correct)</button>
-            </div>
-          </details>
+            <form id="agendaForm" style="display:grid; gap:.6rem; margin-top:.8rem">
+              <div style="display:grid; gap:.4rem">
+                <label for="agendaDate" class="muted">Datum</label>
+                <input id="agendaDate" type="date" required
+                       style="padding:.55rem .7rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#fff">
+              </div>
 
-          <details>
-            <summary>Cheat codes 🎮</summary>
-            <ul class="muted">
-              <li>Druk op <kbd>H</kbd> om harten te laten vallen</li>
-              <li>Voer de <i>Konami code</i> in om een extra bericht te zien</li>
-              <li>Voeg <code>?naam=JouwNaam</code> toe aan de URL voor personalisatie</li>
-            </ul>
+              <div style="display:grid; gap:.4rem">
+                <label for="agendaTitle" class="muted">Titel</label>
+                <input id="agendaTitle" type="text" required placeholder="Bijv. Sterren kijken op het strand"
+                       style="padding:.55rem .7rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#fff">
+              </div>
+
+              <div style="display:grid; gap:.4rem">
+                <label for="agendaNote" class="muted">Notitie (optioneel)</label>
+                <textarea id="agendaNote" rows="2" placeholder="Neem dekentje mee ☺️"
+                          style="padding:.55rem .7rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08); color:#fff"></textarea>
+              </div>
+
+              <button type="submit" class="good" style="width:max-content">+ Voeg toe</button>
+            </form>
+
+            <div id="agendaEmpty" class="muted" style="margin-top:.9rem">Nog niets gepland — voeg iets leuks toe ✨</div>
+            <ul id="agendaList" style="list-style:none; padding:0; margin:.8rem 0 0 0; display:grid; gap:.6rem"></ul>
           </details>
         </aside>
 
@@ -312,7 +314,6 @@
     seedStars(document.getElementById('stars'),   140, 1, 2.2);
     seedStars(document.getElementById('stars2'),  90,  1.5, 2.8);
     seedStars(document.getElementById('stars3'),  60,  2, 3.4);
-
     seedStars(document.getElementById('stars_i'),  60, 1, 2);
     seedStars(document.getElementById('stars2_i'), 40, 1.2, 2.4);
     seedStars(document.getElementById('stars3_i'), 25, 1.6, 3);
@@ -343,18 +344,15 @@
         setTimeout(() => span.remove(), 7000);
       }
     }
-    // Ambient hearts starten na intro
     let ambientHearts;
     function startAmbientHearts(){ ambientHearts = setInterval(()=> dropHearts(2), 2600) }
     function stopAmbientHearts(){ clearInterval(ambientHearts) }
 
     /* Buttons */
-    // VERWIJDERD: document.getElementById('heartBtn')... (bestond niet meer)
     const secret = document.getElementById('secret');
     document.getElementById('secretBtn').addEventListener('click', () => {
       secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
     });
-
     const pet = document.getElementById('petname');
     const pets = ['Schatje 🐻','Lieve jij ✨','Lieverd 🌷','Knappe jij 🦊','Mijn favoriet 💫'];
     pet.addEventListener('click', () => {
@@ -383,7 +381,7 @@
       }
     });
 
-    /* Ontvang kusjes (voorheen: Open je cadeautje) */
+    /* Ontvang kusjes */
     function kissRain(){
       for (let i=0;i<42;i++){
         const s = document.createElement('span');
@@ -404,11 +402,12 @@
     }
     document.getElementById('openBtn').addEventListener('click', () => {
       kissRain();
-      dropHearts(20);
+      // dropHearts(20); // optioneel extra hartjes
       showToast('Kusjesregen! 😘');
+      // geen auto-scroll
     });
 
-    /* Intro -> App overgang */
+    /* Intro -> App overgang (star-wipe) */
     const intro = document.getElementById('intro');
     const appCard = document.getElementById('card');
 
@@ -450,6 +449,99 @@
     if (location.hash === '#brief') {
       setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 800);
     }
+
+    /* ======= Onze agenda (localStorage) ======= */
+    const AGENDA_KEY = 'agendaItems_v1';
+
+    function loadAgenda(){
+      try { return JSON.parse(localStorage.getItem(AGENDA_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveAgenda(items){
+      localStorage.setItem(AGENDA_KEY, JSON.stringify(items));
+    }
+    function escapeHTML(str){
+      return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m]);
+    }
+    function formatDateNL(s){
+      if (!s) return '';
+      const d = new Date(s + 'T00:00:00');
+      return d.toLocaleDateString('nl-NL', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    }
+    function renderAgenda(){
+      const listEl = document.getElementById('agendaList');
+      const emptyEl = document.getElementById('agendaEmpty');
+      if (!listEl || !emptyEl) return;
+
+      let items = loadAgenda();
+      items.sort((a,b) => (a.date || '').localeCompare(b.date || ''));
+
+      listEl.innerHTML = '';
+      if (items.length === 0){
+        emptyEl.style.display = 'block';
+        return;
+      }
+      emptyEl.style.display = 'none';
+
+      let currentDate = '';
+      items.forEach((it, idx) => {
+        if (it.date !== currentDate){
+          currentDate = it.date;
+          const header = document.createElement('li');
+          header.innerHTML = `<div style="margin-top:.4rem; font-weight:700">${formatDateNL(currentDate)}</div>`;
+          listEl.appendChild(header);
+        }
+        const li = document.createElement('li');
+        li.style.border = '1px solid rgba(255,255,255,.18)';
+        li.style.borderRadius = '10px';
+        li.style.padding = '.6rem .75rem';
+        li.style.background = 'rgba(255,255,255,.06)';
+        li.innerHTML = `
+          <div style="display:flex; justify-content:space-between; gap:.6rem; align-items:center">
+            <div>
+              <div style="font-weight:700">${escapeHTML(it.title)}</div>
+              ${it.note ? `<div class="muted" style="margin-top:.2rem">${escapeHTML(it.note)}</div>` : ''}
+            </div>
+            <button data-idx="${idx}" class="chip" title="Verwijderen">Verwijder</button>
+          </div>
+        `;
+        listEl.appendChild(li);
+      });
+
+      listEl.querySelectorAll('button[data-idx]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = Number(e.currentTarget.getAttribute('data-idx'));
+          const items = loadAgenda();
+          items.splice(idx, 1);
+          saveAgenda(items);
+          renderAgenda();
+        });
+      });
+    }
+
+    const agendaForm = document.getElementById('agendaForm');
+    if (agendaForm){
+      agendaForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const date = document.getElementById('agendaDate').value;
+        const title = document.getElementById('agendaTitle').value.trim();
+        const note  = document.getElementById('agendaNote').value.trim();
+        if (!date || !title) return;
+
+        const items = loadAgenda();
+        items.push({ date, title, note });
+        saveAgenda(items);
+
+        agendaForm.reset();
+        renderAgenda();
+        if (typeof showToast === 'function') showToast('Toegevoegd aan onze agenda ✨');
+      });
+
+      const today = new Date();
+      document.getElementById('agendaDate').value = today.toISOString().slice(0,10);
+    }
+
+    renderAgenda();
   </script>
 </body>
 </html>
