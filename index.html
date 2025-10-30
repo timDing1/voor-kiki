@@ -6,141 +6,169 @@
   <title>Voor jou 💫</title>
   <meta name="description" content="Een kleine, lieve, interactieve liefdesbrief als webapp 😘" />
   <style>
-    :root {
-      --bg: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-      --card: rgba(255,255,255,0.08);
-      --text: #f9fafb;
-      --accent: #ef476f;
-      --muted: #9ca3af;
-      --shadow: 0 10px 30px rgba(0,0,0,.25);
-      --radius: 18px;
+    :root{
+      --text:#f9fafb;
+      --muted:#cbd5e1;
+      --accent:#ef476f;
+      --radius:18px;
+      --glass: rgba(255,255,255,.08);
+      --glass-border: rgba(255,255,255,.2);
     }
 
-    body {
-      margin: 0;
+    /* ====== BASE ====== */
+    html,body{height:100%}
+    body{
+      margin:0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
       color: var(--text);
-      overflow-x: hidden;
-      min-height: 100vh;
-      position: relative;
+      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+      overflow-x:hidden;
+    }
+    .hidden{opacity:0; pointer-events:none; transform: scale(.98); transition: opacity .7s ease, transform .7s ease}
+    .show{opacity:1; transform: none}
+
+    /* ====== INTRO ====== */
+    .intro{
+      position:fixed; inset:0; display:grid; place-items:center; z-index:20;
+      background: radial-gradient(ellipse at bottom, #0e1622 0%, #07080d 100%);
+      transition: opacity .8s ease;
+    }
+    .intro .box{
+      text-align:center; padding: clamp(20px, 5vw, 48px);
+      border-radius: 22px; backdrop-filter: blur(12px);
+      background: rgba(255,255,255,.06); border:1px solid var(--glass-border);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      max-width: 820px; margin: 0 16px;
+    }
+    .intro h1{margin:0 0 .4rem 0; font-size: clamp(28px, 5vw, 40px)}
+    .intro p{margin:.4rem 0; color: var(--muted)}
+    .intro .cta{
+      margin-top:1.2rem; padding:.9rem 1.2rem; font-weight:800; font-size:1rem;
+      border-radius:14px; border:none; cursor:pointer;
+      background: linear-gradient(180deg, #ffdbe6, #ffc5d7); color:#7b1233;
+      box-shadow: 0 10px 30px rgba(239,71,111,.25);
+      transition: transform .15s ease; 
+    }
+    .intro .cta:hover{ transform: translateY(-2px) }
+    .intro .mini{
+      margin-top: .9rem; font-size:.92rem; color:#ffd6f3; font-style: italic;
     }
 
-    .wrap {
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: clamp(16px, 4vw, 48px);
+    /* ====== STARS LAYERS ====== */
+    .stars, .stars2, .stars3{
+      position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+    }
+    .stars span, .stars2 span, .stars3 span{
+      position:absolute; border-radius:50%; background:#fff; opacity:.85;
+      box-shadow: 0 0 6px 2px rgba(255,255,255,.65), 0 0 20px rgba(173,216,255,.35);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    .stars2 span{ opacity:.9; box-shadow:0 0 8px 3px rgba(255,255,255,.7), 0 0 30px rgba(173,216,255,.45) }
+    .stars3 span{ opacity:1; box-shadow:0 0 10px 4px rgba(255,255,255,.8), 0 0 40px rgba(255,200,250,.5) }
+    @keyframes twinkle{
+      from{ opacity:.5; transform: translateY(0) scale(.9) }
+      to{ opacity:1; transform: translateY(-2px) scale(1.15) }
+    }
+    /* zachte parallax drift per laag */
+    .stars{ animation: drift1 60s linear infinite }
+    .stars2{ animation: drift2 90s linear infinite }
+    .stars3{ animation: drift3 120s linear infinite }
+    @keyframes drift1{ from{transform:translateY(0)} to{transform:translateY(-30px)} }
+    @keyframes drift2{ from{transform:translateY(0)} to{transform:translateY(-45px)} }
+    @keyframes drift3{ from{transform:translateY(0)} to{transform:translateY(-60px)} }
+
+    /* Shooting stars (streaks) */
+    .streak{
+      position:fixed; width:2px; height:2px; background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,1));
+      filter: drop-shadow(0 0 6px white);
+      transform: rotate(-20deg);
+      animation: shoot 1.2s ease-out forwards;
+      z-index:1; pointer-events:none;
+    }
+    @keyframes shoot{
+      0%{ opacity:0; transform: translate(-10vw,-10vh) rotate(-20deg) scaleX(1) }
+      10%{ opacity:1 }
+      100%{ opacity:0; transform: translate(60vw, 40vh) rotate(-20deg) scaleX(40) }
     }
 
-    .card {
-      width: min(920px, 100%);
-      background: rgba(255,255,255,0.1);
+    /* ====== APP WRAPPER ====== */
+    .wrap{ min-height:100dvh; display:grid; place-items:center; padding: clamp(16px, 4vw, 48px); position:relative; z-index:5 }
+    .card{
+      width:min(920px, 100%);
+      background: var(--glass);
+      border:1px solid var(--glass-border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
       backdrop-filter: blur(12px);
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.15);
+      overflow:hidden;
     }
+    header{ padding:clamp(16px,3vw,28px) clamp(16px,4vw,40px); display:flex; align-items:center; gap:14px; border-bottom:1px dashed rgba(255,255,255,.15)}
+    header .emoji{ font-size: clamp(34px, 5vw, 50px) }
+    header h1{ margin:0; font-size:clamp(22px,4.5vw,34px) }
+    header small{ color: var(--muted) }
+    main{ padding:clamp(18px,4vw,44px); display:grid; gap:28px }
+    @media (min-width: 840px){ main{ grid-template-columns: 1.2fr .8fr; align-items:start } }
 
-    header {
-      padding: clamp(16px,3vw,28px) clamp(16px,4vw,40px);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      border-bottom: 1px dashed rgba(255,255,255,0.1);
+    .panel{ background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius: calc(var(--radius) - 6px); padding: clamp(14px,2.5vw,24px) }
+    .type{ font-size:clamp(18px,3.6vw,22px); line-height:1.6 }
+    .muted{ color:var(--muted) }
+
+    .btns{ display:flex; flex-wrap:wrap; gap:10px; align-items:center }
+    button, .chip{
+      appearance:none; border:none; padding:.7rem 1rem; border-radius:12px; background:#f5f6f7; color:#111;
+      cursor:pointer; font-weight:700; box-shadow: inset 0 -2px 0 rgba(0,0,0,.05); transition:.2s transform,.2s filter
     }
+    button:hover{ transform: translateY(-2px) }
+    .primary{ background: linear-gradient(180deg, #ffdbe6, #ffc5d7); color:#8b1b3f }
+    .good{ background: linear-gradient(180deg, #dcffe6, #bff5d7); color:#0e6b4b }
+    .chip{ font-size:.85rem }
 
-    header .emoji { font-size: clamp(34px, 5vw, 50px) }
-    header h1 { margin: 0; font-size: clamp(22px,4.5vw,34px); line-height: 1.15 }
-    header small { color: var(--muted) }
+    details{ border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:.7rem 1rem; color:#fff }
+    details[open]{ background: rgba(255,255,255,.05) }
 
-    main { padding: clamp(18px,4vw,44px); display: grid; gap: 28px }
-    @media (min-width: 840px) { main { grid-template-columns: 1.2fr .8fr; align-items: start } }
+    .footer{ padding: 8px 18px 24px; text-align:center; color:var(--muted) }
 
-    .panel {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: calc(var(--radius) - 6px);
-      padding: clamp(14px, 2.5vw, 24px);
-    }
+    /* Hearts */
+    .bg{ position: fixed; inset:0; pointer-events:none; z-index:4; overflow:hidden }
+    .heart{ position:absolute; font-size:12px; opacity:0; animation: float 6s linear forwards }
+    @keyframes float{ 0%{ transform: translateY(20px) scale(.6) rotate(0deg); opacity:0 } 12%{ opacity:.85 } 100%{ transform: translateY(-110vh) scale(1.3) rotate(18deg); opacity:0 } }
+    .secret{ display:none; margin-top:10px; font-size:1.05rem }
+    .toast{ position: fixed; left:50%; transform: translateX(-50%); bottom: 18px; background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); padding:.6rem 1rem; border-radius:999px; box-shadow: 0 10px 30px rgba(0,0,0,.4); z-index: 9; display:none; color:white }
 
-    .type { font-size: clamp(18px,3.6vw,22px); line-height: 1.6; }
+    /* Brief-styling */
+    .letter{ line-height:1.75; font-size:1.02rem }
+    .letter h4{ margin:.2rem 0 .6rem 0; font-size:1.1rem; color:#ffd6f3 }
+    .letter p{ margin:.7rem 0 }
+    .letter .sign{ margin-top:.8rem; color: var(--muted); font-style: italic }
 
-    .muted { color: var(--muted) }
-
-    .btns { display:flex; flex-wrap:wrap; gap:10px; align-items:center }
-    button, .chip {
-      appearance: none;
-      border: none;
-      padding: .7rem 1rem;
-      border-radius: 12px;
-      background: #f5f6f7;
-      color: #111;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: inset 0 -2px 0 rgba(0,0,0,.05);
-      transition: .2s transform, .2s filter;
-    }
-    button:hover { transform: translateY(-2px); }
-    .primary { background: linear-gradient(180deg, #ffdbe6, #ffc5d7); color:#8b1b3f }
-    .good { background: linear-gradient(180deg, #dcffe6, #bff5d7); color:#0e6b4b }
-
-    details {
-      border: 1px dashed rgba(255,255,255,0.15);
-      border-radius: 12px;
-      padding: .7rem 1rem;
-      color: #fff;
-    }
-    details[open] { background: rgba(255,255,255,0.05); }
-
-    .footer {
-      padding: 8px 18px 24px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    /* Floating hearts background */
-    .bg, .stars { position: fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
-    .heart { position:absolute; font-size:12px; opacity:0; animation: float 6s linear forwards }
-    @keyframes float { 0%{ transform: translateY(20px) scale(.6) rotate(0deg); opacity:0 } 12%{ opacity:.85 } 100%{ transform: translateY(-110vh) scale(1.3) rotate(18deg); opacity:0 } }
-
-    /* Hidden message */
-    .secret { display:none; margin-top:10px; font-size: 1.05rem }
-
-    .toast { position: fixed; left:50%; transform: translateX(-50%); bottom: 18px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding:.6rem 1rem; border-radius:999px; box-shadow: var(--shadow); z-index: 9; display:none; color:white }
-
-    /* Stars */
-    .stars span {
-      position: absolute;
-      border-radius: 50%;
-      background: white;
-      opacity: 0.8;
-      animation: twinkle 4s infinite ease-in-out alternate;
-    }
-    @keyframes twinkle {
-      from { opacity: 0.3; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1.2); }
-    }
-
-    .sterrenquote {
-      font-style: italic;
-      color: #ffd6f3;
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 1.1rem;
-      animation: fadein 2.5s ease;
-    }
-
-    @keyframes fadein { from {opacity:0} to {opacity:1} }
+    .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top: .8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
+    @keyframes fadein{ from{opacity:0} to{opacity:1} }
   </style>
 </head>
 <body>
+  <!-- INTRO / STARTPAGINA -->
+  <div class="intro show" id="intro">
+    <div class="stars" id="stars_i"></div>
+    <div class="stars2" id="stars2_i"></div>
+    <div class="stars3" id="stars3_i"></div>
+    <div class="box">
+      <h1>Welkom, <span id="introNaam">mooie jij</span> ✨</h1>
+      <p>Ik heb iets kleins gebouwd. Een plekje onder de sterren — speciaal voor jou.</p>
+      <p class="mini">“Als de sterren op de juiste plek staan, voelt ‘n moment als thuis.”</p>
+      <button class="cta" id="startBtn">Sterren ontgrendelen ✨</button>
+    </div>
+  </div>
+
+  <!-- STAR FIELDS (achtergrond van de app) -->
   <div class="stars" id="stars"></div>
+  <div class="stars2" id="stars2"></div>
+  <div class="stars3" id="stars3"></div>
+
+  <!-- Hearts layer -->
   <div class="bg" id="bg" aria-hidden="true"></div>
 
-  <div class="wrap">
+  <!-- APP -->
+  <div class="wrap hidden" id="app">
     <article class="card" role="main">
       <header>
         <div class="emoji">💌</div>
@@ -159,26 +187,71 @@
 
           <div class="btns">
             <button class="primary" id="openBtn">Open je cadeautje 🎁</button>
-            <button id="heartBtn">Laat harten vallen ❤️</button>
-            <button class="good" id="secretBtn">Geheime boodschap 🔐</button>
+            <button id="heartBtn" title="Laat wat liefde vallen">Laat harten vallen ❤️</button>
+            <button class="good" id="secretBtn" title="pssst">Geheime boodschap 🔐</button>
             <span class="chip" id="petname">Schatje 🐻</span>
           </div>
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
 
         <aside class="panel">
-          <details open>
-            <summary>🌟 Mijn brief aan jou</summary>
-            <p>Aller allerliefste Kiki Dingewolfs,</p>
-            <p>Ik denk dat ik alles al gezegd heb, maar je hebt vannacht nóg net even wat extra door mijn hoofd gespookt. Waarna ik vervolgens nu ben begonnen aan dit berichtje. Dus bij deze nogmaals, omdat ik het belangrijk vind dat je weet wat je voor mij betekent.</p>
-            <p>Ik vind het zo fijn om met je te zijn. Je brengt zo veel warmte en echt iets bijzonders.</p>
-            <p>De situatie is nou eenmaal lastig, toch geniet ik van wat we samen hebben. We hebben misschien ‘niets’, maar tegelijk voelt het als alles. We zijn geen ‘wij’ in woorden en in ons verstand, maar wel in gevoel.</p>
-            <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel wil ik je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
-            Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet ik wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
-            <p>Je verdient het mooiste Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
-            <p class="muted">— van mij, voor jou 💗</p>
+          <h3 style="margin-top:0">Kleine extra's</h3>
+          <details>
+            <summary>Inside jokes 😂</summary>
+            <ul>
+              <li>TODO: Vervang met jullie grap #1</li>
+              <li>TODO: Vervang met jullie grap #2</li>
+              <li>TODO: Vervang met jullie grap #3</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Hoeveel geef ik om je? 💖</summary>
+            <div class="meter">
+              <input type="range" min="0" max="100" value="99" id="slider" />
+              <output id="loveOut">99%</output>
+            </div>
+          </details>
+
+          <details>
+            <summary>Kleine quiz 📚</summary>
+            <p class="muted">Wat is mijn favoriete ding aan jou?</p>
+            <div class="btns">
+              <button class="chip">Je humor</button>
+              <button class="chip">Je ogen</button>
+              <button class="chip">Alles (correct)</button>
+            </div>
+          </details>
+
+          <details>
+            <summary>Cheat codes 🎮</summary>
+            <ul class="muted">
+              <li>Druk op <kbd>H</kbd> om harten te laten vallen</li>
+              <li>Voer de <i>Konami code</i> in om een extra bericht te zien</li>
+              <li>Voeg <code>?naam=JouwNaam</code> toe aan de URL voor personalisatie</li>
+            </ul>
           </details>
         </aside>
+
+        <!-- BRIEF -->
+        <section class="panel letter" id="brief">
+          <h3 style="margin-top:0">Mijn brief aan jou</h3>
+          <h4>Aller allerliefste Kiki Dingewolfs,</h4>
+
+          <p>Ik denk dat ik alles al gezegd heb, maar je hebt vannacht nóg net even wat extra door mijn hoofd gespookt. Waarna ik vervolgens nu ben begonnen aan dit berichtje. Dus bij deze nogmaals, omdat ik het belangrijk vind dat je weet wat je voor mij betekent.</p>
+
+          <p>Ik vind het zo fijn om met je te zijn. Je brengt zo veel warmte en echt iets bijzonders.</p>
+
+          <p>De situatie is nou eenmaal lastig, toch geniet ik van wat we samen hebben. We hebben misschien ‘niets’, maar tegelijk voelt het als alles. We zijn geen ‘wij’ in woorden en in ons verstand, maar wel in gevoel.</p>
+
+          <p>Ik baal enorm als ik je een onaangenaam gevoel geef, dat is nooit mijn bedoeling. Integendeel wil ik je juist betrekken in mijn leven en je laten voelen dat je belangrijk voor me bent. 
+          Ik ben blij dat je er bent en deel uitmaakt van mijn dagen. Dat maakt me gelukkig. Ik weet ik wat voor situatie we zitten, maar ik weet ook dat er iets echts tussen ons is. Iets dat niet vanzelfsprekend is. Juist door deze verhouding denk ik dat dergelijke momenten zijn gebeurd.</p>
+
+          <p>Je verdient het mooiste Kiek. Wat er ook mag gebeuren, ik gun je alles. Met of zonder mij. Onze oprechte momenten betekenen veel voor me, en dat wil ik koesteren.</p>
+
+          <p class="sign">— van mij, voor jou 💗</p>
+        </section>
+
       </main>
 
       <div class="footer">
@@ -190,18 +263,20 @@
   <div class="toast" id="toast">Geheime mode geactiveerd 😎</div>
 
   <script>
-    // Personalisatie
+    /* ========= Personalisatie ========= */
     const params = new URLSearchParams(location.search);
     const naamParam = params.get('naam');
     if (naamParam) {
-      document.getElementById('naam').textContent = decodeURIComponent(naamParam);
-      document.title = `Voor ${decodeURIComponent(naamParam)} 💫`;
+      const n = decodeURIComponent(naamParam);
+      document.getElementById('naam').textContent = n;
+      document.getElementById('introNaam').textContent = n;
+      document.title = `Voor ${n} 💫`;
     }
 
-    // Jaar
+    /* ========= Jaar ========= */
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Typewriter
+    /* ========= Typewriter ========= */
     const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.`;
     const typeEl = document.getElementById('type');
     let i = 0;
@@ -221,7 +296,41 @@
       }
     })();
 
-    // Floating hearts
+    /* ========= Stars: generate multi-layer + shooting stars ========= */
+    function seedStars(container, count, sizeMin=1, sizeMax=2.2){
+      for(let i=0;i<count;i++){
+        const s=document.createElement('span');
+        const size = sizeMin + Math.random()*(sizeMax-sizeMin);
+        s.style.width = s.style.height = `${size}px`;
+        s.style.left = `${Math.random()*100}%`;
+        s.style.top  = `${Math.random()*100}%`;
+        s.style.animationDelay = `${Math.random()*5}s`;
+        container.appendChild(s);
+      }
+    }
+    seedStars(document.getElementById('stars'),   140, 1, 2.2);
+    seedStars(document.getElementById('stars2'),  90,  1.5, 2.8);
+    seedStars(document.getElementById('stars3'),  60,  2, 3.4);
+
+    /* Intro heeft eigen subtiele sterren */
+    seedStars(document.getElementById('stars_i'),  60, 1, 2);
+    seedStars(document.getElementById('stars2_i'), 40, 1.2, 2.4);
+    seedStars(document.getElementById('stars3_i'), 25, 1.6, 3);
+
+    /* Shooting stars */
+    function shootingStar(){
+      const s = document.createElement('div');
+      s.className='streak';
+      // willekeurige startpositie aan de linkerbovenrand-zone
+      s.style.left = `${-10 + Math.random()*20}vw`;
+      s.style.top  = `${-10 + Math.random()*30}vh`;
+      document.body.appendChild(s);
+      setTimeout(()=> s.remove(), 1300);
+    }
+    // af en toe eentje
+    setInterval(()=> { if (Math.random() < 0.6) shootingStar() }, 3500);
+
+    /* ========= Hearts ========= */
     const bg = document.getElementById('bg');
     function dropHearts(count = 18) {
       for (let j = 0; j < count; j++) {
@@ -236,32 +345,94 @@
         setTimeout(() => span.remove(), 7000);
       }
     }
-    setInterval(()=> dropHearts(2), 2500);
+    // zachte ambient
+    let ambientHearts;
+    function startAmbientHearts(){ ambientHearts = setInterval(()=> dropHearts(2), 2600) }
+    function stopAmbientHearts(){ clearInterval(ambientHearts) }
 
-    // Stars
-    const starContainer = document.getElementById('stars');
-    for (let i = 0; i < 120; i++) {
-      const s = document.createElement('span');
-      const size = Math.random() * 2 + 1;
-      s.style.width = `${size}px`;
-      s.style.height = `${size}px`;
-      s.style.left = `${Math.random() * 100}%`;
-      s.style.top = `${Math.random() * 100}%`;
-      s.style.animationDelay = `${Math.random() * 5}s`;
-      starContainer.appendChild(s);
-    }
-
-    // Buttons
+    /* ========= Buttons ========= */
     document.getElementById('heartBtn').addEventListener('click', () => dropHearts(30));
+
     const secret = document.getElementById('secret');
     document.getElementById('secretBtn').addEventListener('click', () => {
       secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
     });
+
     const pet = document.getElementById('petname');
     const pets = ['Schatje 🐻','Lieve jij ✨','Lieverd 🌷','Knappe jij 🦊','Mijn favoriet 💫'];
     pet.addEventListener('click', () => {
       pet.textContent = pets[Math.floor(Math.random()*pets.length)];
     });
+
+    /* ========= Toast ========= */
+    const toast = document.getElementById('toast');
+    function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=> toast.style.display='none', 2200) }
+
+    /* ========= Konami ========= */
+    const K = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let buffer = [];
+    window.addEventListener('keydown', (e) => {
+      buffer.push(e.key);
+      if (buffer.length > K.length) buffer.shift();
+      if (K.every((k, i) => buffer[i]?.toLowerCase() === k.toLowerCase())) {
+        buffer = [];
+        showToast('Geheime mode geactiveerd 😎');
+        dropHearts(60);
+        const extra = document.createElement('p');
+        extra.className = 'secret';
+        extra.style.display = 'block';
+        extra.innerHTML = 'Bonus: als je dit leest, ben je officieel mijn <b>favoriete mens</b>. 🎉';
+        typeEl.after(extra);
+      }
+    });
+
+    /* ========= Cadeautje-knop (GEFIXT) ========= */
+    function kissRain(){
+      for (let i=0;i<42;i++){
+        const s = document.createElement('span');
+        s.textContent = Math.random()>0.5 ? '💋' : '😘';
+        s.style.position='fixed';
+        s.style.left = Math.random()*100 + 'vw';
+        s.style.top = '-10px';
+        s.style.fontSize = (18 + Math.random()*22) + 'px';
+        s.style.transition = 'transform 3s linear, opacity 3s';
+        s.style.zIndex = 6;
+        document.body.append(s);
+        requestAnimationFrame(() => {
+          s.style.transform = `translateY(${110+Math.random()*20}vh)`;
+          s.style.opacity = '0';
+        });
+        setTimeout(() => s.remove(), 3200);
+      }
+    }
+    document.getElementById('openBtn').addEventListener('click', () => {
+      kissRain();
+      dropHearts(20);
+      showToast('Kusjesregen! 😘');
+      document.getElementById('brief')?.scrollIntoView({behavior:'smooth'});
+    });
+
+    /* ========= Intro -> App overgang ========= */
+    const intro = document.getElementById('intro');
+    const app = document.getElementById('app');
+    document.getElementById('startBtn').addEventListener('click', () => {
+      // kleine “reveal” animatie
+      intro.classList.add('hidden');
+      setTimeout(()=>{
+        intro.style.display='none';
+        app.classList.remove('hidden');
+        app.classList.add('show');
+        startAmbientHearts();
+        showToast('De sterren staan goed ✨');
+        // kleine kusjes als welkom
+        setTimeout(kissRain, 600);
+      }, 750);
+    });
+
+    // Als iemand direct met #brief binnenkomt
+    if (location.hash === '#brief') {
+      setTimeout(() => document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}), 800);
+    }
   </script>
 </body>
 </html>
