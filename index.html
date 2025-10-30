@@ -144,15 +144,7 @@
     .sterrenquote{ font-style: italic; color:#ffd6f3; margin-top: .8rem; text-align:center; font-size:1.1rem; animation: fadein 2.5s ease }
     @keyframes fadein{ from{opacity:0} to{opacity:1} }
 
-    /* --- NIEUW: Kleine extra's – nette lijsten en players --- */
-    .list-plain{ list-style:none; padding-left:0; margin:0 }
-    .list-plain li{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:.6rem .8rem; border:1px solid rgba(255,255,255,.15);
-      border-radius:10px; background:rgba(255,255,255,.05); margin:.45rem 0;
-    }
-    .list-plain .meta{ color:var(--muted); font-size:.92rem }
-    .list-plain .row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center }
+    /* Players grid */
     .players-wrap{
       display:grid; gap:10px; margin-top:.6rem;
       grid-template-columns: 1fr;
@@ -160,14 +152,6 @@
     @media (min-width: 720px){
       .players-wrap{ grid-template-columns: 1fr 1fr }
     }
-    /* Agenda badges */
-    .badge{
-      display:inline-block; padding:.2rem .55rem; border-radius:999px;
-      background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); font-size:.82rem
-    }
-    .badge.good{ background: linear-gradient(180deg, #dcffe6, #bff5d7); color:#0e6b4b; border:none }
-    .badge.soon{ background: linear-gradient(180deg, #fff7cc, #ffe89a); color:#6a5200; border:none }
-    .badge.past{ background: rgba(255,255,255,.08); color:#b8c0cc }
   </style>
 </head>
 <body>
@@ -207,7 +191,13 @@
 
       <main>
         <section class="panel" aria-live="polite">
-          <p class="type" id="type"></p>
+          <!-- Statisch, geen typewriter-animatie -->
+          <p class="type" id="type">
+            Hoi <strong id="typeName">mooie jij</strong> 🫶<br/><br/>
+            Ik heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends:
+            een klein hoekje internet dat helemaal voor jou is.<br/><br/>
+            Scroll, klik, speel – en onthoud: ik kies elke dag voor jou.
+          </p>
           <p class="sterrenquote">✨ Weet je wat het mooiste is? Dat onze sterren precies op de juiste plek staan. ✨</p>
 
           <div class="btns">
@@ -218,50 +208,50 @@
           <p class="secret" id="secret">Oké luister... ik vind jou dus officieel <b>geweldig</b>. Zoals, "ik-sta-met-een-stom-hoofd-te-glimlachen-naar-m’n-telefoon" geweldig. 🥰</p>
         </section>
 
-        <!-- NIEUWE KLEINE EXTRA'S -->
+        <!-- KLEINE EXTRA'S (standaard gesloten) -->
         <aside class="panel" id="extras">
           <h3 style="margin-top:0">Kleine extra's</h3>
 
-          <!-- ONZE PLAYLIST -->
-          <details open>
+          <!-- ONZE PLAYLIST (alleen officiële embeds) -->
+          <details>
             <summary>Onze playlist 🎵</summary>
-
-            <div style="display:flex; align-items:center; gap:10px; margin:.6rem 0">
-              <label class="muted" style="display:flex; align-items:center; gap:8px; cursor:pointer">
-                <input id="plToggle" type="checkbox" />
-                Toon spelers (Spotify)
-              </label>
-              <a id="plOpenAll" class="chip" href="#" title="Open alle nummers in nieuwe tab">Open alles</a>
+            <div class="players-wrap">
+              <!-- Stop De Tijd -->
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0Q6PoJX8JWndVLcJnM1BLX"
+                width="100%" height="152" frameborder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+              <!-- Zij Laat Me Praten -->
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/25cvMotloW6bJCSP0hKG59"
+                width="100%" height="152" frameborder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+              <!-- Zoveel Liefde -->
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4osLdgj5ToLMc8EovfWFjx"
+                width="100%" height="152" frameborder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+              <!-- Platonisch -->
+              <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6Mwcn4IEsarl0gDqJ29XFy"
+                width="100%" height="152" frameborder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
-
-            <ul id="playlist" class="list-plain"></ul>
-
-            <div id="players" class="players-wrap" hidden></div>
           </details>
 
-          <!-- ONZE AGENDA -->
+          <!-- ONZE AGENDA (statisch, geen opslag) -->
           <details>
             <summary>Onze agenda 📅</summary>
-
-            <form id="agForm" onsubmit="return false" style="display:grid; gap:10px; margin:.6rem 0">
-              <input id="agTitle" type="text" placeholder="Wat gaan we doen?" required
-                    style="padding:.65rem .8rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.09); color:white">
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px">
-                <input id="agDate" type="date" required
-                      style="padding:.6rem .8rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.09); color:white">
-                <input id="agTime" type="time"
-                      style="padding:.6rem .8rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.09); color:white">
-              </div>
-              <input id="agPlace" type="text" placeholder="Waar? (optioneel)"
-                    style="padding:.6rem .8rem; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.09); color:white">
-              <div class="btns">
-                <button class="primary" id="agAdd">Moment toevoegen</button>
-                <button class="chip" id="agClear" type="button" title="Leeg de agenda">Alles wissen</button>
-              </div>
-              <small class="muted">Agenda wordt lokaal opgeslagen (alleen op dit apparaat).</small>
-            </form>
-
-            <ul id="agendaList" class="list-plain"></ul>
+            <ul style="list-style:none; padding-left:0; margin:.6rem 0 0 0">
+              <li style="margin:.5rem 0; padding:.6rem .8rem; border:1px solid rgba(255,255,255,.15); border-radius:10px; background:rgba(255,255,255,.05);">
+                <strong>Weekendje Amsterdam</strong> — <span class="muted">1 &amp; 2 november</span>
+              </li>
+              <li style="margin:.5rem 0; padding:.6rem .8rem; border:1px solid rgba(255,255,255,.15); border-radius:10px; background:rgba(255,255,255,.05);">
+                <strong>Samen acteerkunsten Kiki bekijken</strong> — <span class="muted">3 november</span>
+              </li>
+              <li style="margin:.5rem 0; padding:.6rem .8rem; border:1px solid rgba(255,255,255,.15); border-radius:10px; background:rgba(255,255,255,.05);">
+                <strong>Weekendje bij Tim thuis</strong> — <span class="muted">7, 8 &amp; 9 november</span>
+              </li>
+              <li style="margin:.5rem 0; padding:.6rem .8rem; border:1px solid rgba(255,255,255,.15); border-radius:10px; background:rgba(255,255,255,.05);">
+                <strong>Tripje naar Dublin</strong> — <span class="muted">5, 6, 7 &amp; 8 december</span>
+              </li>
+            </ul>
           </details>
         </aside>
 
@@ -302,31 +292,12 @@
       const n = decodeURIComponent(naamParam);
       document.getElementById('naam').textContent = n;
       document.getElementById('introNaam').textContent = n;
+      document.getElementById('typeName').textContent = n;
       document.title = `Voor ${n} 💫`;
     }
 
     /* Jaar */
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    /* Typewriter */
-    const text = `Hoi <strong>${naamParam || 'mooie jij'}</strong> 🫶\n\nIk heb geen bloemen gestuurd (die verwelken), geen chocolade (die verdwijnt), maar iets blijvends: een klein hoekje internet dat helemaal voor jou is.\n\nScroll, klik, speel – en onthoud: ik kies elke dag voor jou.`;
-    const typeEl = document.getElementById('type');
-    let i = 0;
-    (function typeWriter(){
-      if (i < text.length) {
-        const ch = text[i++];
-        if (ch === '<') {
-          const end = text.indexOf('>', i);
-          typeEl.innerHTML += text.slice(i-1, end+1);
-          i = end + 1;
-        } else if (ch === '\n') {
-          typeEl.innerHTML += '<br/>';
-        } else {
-          typeEl.innerHTML += ch;
-        }
-        setTimeout(typeWriter, 16);
-      }
-    })();
 
     /* Stars seeding */
     function seedStars(container, count, sizeMin=1, sizeMax=2.2){
@@ -409,7 +380,7 @@
         extra.className = 'secret';
         extra.style.display = 'block';
         extra.innerHTML = 'Bonus: als je dit leest, ben je officieel mijn <b>favoriete mens</b>. 🎉';
-        typeEl.after(extra);
+        document.getElementById('type').after(extra);
       }
     });
 
@@ -436,173 +407,6 @@
       kissRain();
       dropHearts(20);
       showToast('Kusjesregen! 😘');
-    });
-
-    /* --- NIEUW: ONZE PLAYLIST & AGENDA --- */
-
-    // 1) Playlist – jullie 4 nummers
-    const PLAYLIST = [
-      { title: 'Stop De Tijd', url: 'https://open.spotify.com/track/0Q6PoJX8JWndVLcJnM1BLX?si=3adcc4b701754614' },
-      { title: 'Zij Laat Me Praten', url: 'https://open.spotify.com/track/25cvMotloW6bJCSP0hKG59?si=ebe3d3a77cd54a71' },
-      { title: 'Zoveel Liefde', url: 'https://open.spotify.com/track/4osLdgj5ToLMc8EovfWFjx?si=66cf2acd2eee4ddd' },
-      { title: 'Platonisch', url: 'https://open.spotify.com/track/6Mwcn4IEsarl0gDqJ29XFy?si=297a34c749e04973' },
-    ];
-
-    (function setupPlaylist(){
-      const list = document.getElementById('playlist');
-      const players = document.getElementById('players');
-      const toggle = document.getElementById('plToggle');
-      const openAll = document.getElementById('plOpenAll');
-
-      // lijst renderen
-      list.innerHTML = PLAYLIST.map((t,i)=>`
-        <li>
-          <div class="row">
-            <strong>${t.title}</strong>
-            <span class="meta">Spotify</span>
-          </div>
-          <div class="row">
-            <a class="chip" href="${t.url}" target="_blank" rel="noopener">Open</a>
-            <button class="chip" data-play="${i}">▶︎ Spelen</button>
-          </div>
-        </li>
-      `).join('');
-
-      // players renderen
-      function makeEmbed(u){
-        const m = u.match(/\/track\/([^?]+)/);
-        const id = m ? m[1] : null;
-        if (!id) return '';
-        return `
-          <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${id}?utm_source=generator"
-            width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        `;
-      }
-      players.innerHTML = PLAYLIST.map(t=> makeEmbed(t.url)).join('');
-
-      // open alles
-      openAll.addEventListener('click', (e)=>{
-        e.preventDefault();
-        PLAYLIST.forEach(t=> window.open(t.url, '_blank', 'noopener'));
-        showToast('Playlist geopend 🎧');
-      });
-
-      // “spelen” klikt naar de juiste embed (als zichtbaar), anders opent link
-      list.addEventListener('click', (e)=>{
-        const btn = e.target.closest('button[data-play]');
-        if (!btn) return;
-        const idx = Number(btn.dataset.play);
-        if (!toggle.checked){
-          window.open(PLAYLIST[idx].url, '_blank', 'noopener');
-          return;
-        }
-        const ifr = players.querySelectorAll('iframe')[idx];
-        if (ifr){
-          ifr.scrollIntoView({behavior:'smooth', block:'center'});
-          ifr.style.filter = 'brightness(1.2)';
-          setTimeout(()=> ifr.style.filter='', 700);
-        }
-      });
-
-      // toggle players
-      toggle.addEventListener('change', ()=>{
-        players.hidden = !toggle.checked;
-      });
-    })();
-
-    // 2) Onze agenda – simpele planner (lokaal)
-    (function setupAgenda(){
-      const form = document.getElementById('agForm');
-      const title = document.getElementById('agTitle');
-      const date = document.getElementById('agDate');
-      const time = document.getElementById('agTime');
-      const place = document.getElementById('agPlace');
-      const add = document.getElementById('agAdd');
-      const clear = document.getElementById('agClear');
-      const list = document.getElementById('agendaList');
-
-      const KEY = 'kiki_agenda_v1';
-
-      let items = load();
-
-      function sortItems(a,b){ return +new Date(a.when) - +new Date(b.when) }
-
-      function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) ?? [] }catch{ return [] } }
-      function save(){ try{ localStorage.setItem(KEY, JSON.stringify(items)) }catch{} }
-
-      function fmtDate(d){
-        const dt = new Date(d);
-        return dt.toLocaleString('nl-NL', { weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
-      }
-      function relTime(d){
-        const now = new Date();
-        const dt = new Date(d);
-        const ms = +dt - +now;
-        const abs = Math.abs(ms);
-        const mins = Math.round(abs/60000);
-        if (ms < 0) return { text:`${mins<60 ? `${mins} min` : `${Math.round(mins/60)} uur`} geleden`, cls:'past' };
-        if (mins < 60) return { text:`over ${mins} min`, cls:'soon' };
-        const days = Math.round(mins/1440);
-        if (days <= 7) return { text:`over ${days} dag${days!==1?'en':''}`, cls:'soon' };
-        return { text:`over ~${Math.round(days/7)} week${Math.round(days/7)!==1?'en':''}`, cls:'' };
-      }
-
-      function render(){
-        if (!items.length){
-          list.innerHTML = `<li class="muted" style="justify-content:center">Nog geen plannen… voeg er eentje toe ✨</li>`;
-          return;
-        }
-        items.sort(sortItems);
-        list.innerHTML = items.map((it,i)=>{
-          const r = relTime(it.when);
-          return `
-            <li>
-              <div>
-                <div><strong>${it.title}</strong> ${it.place ? `<span class="meta">· ${it.place}</span>` : ''}</div>
-                <div class="meta">${fmtDate(it.when)}</div>
-              </div>
-              <div class="row">
-                <span class="badge ${r.cls}">${r.text}</span>
-                <button class="chip" data-del="${i}">×</button>
-              </div>
-            </li>
-          `;
-        }).join('');
-      }
-      render();
-
-      add.addEventListener('click', ()=>{
-        if (!title.value.trim() || !date.value) return;
-        const when = new Date(`${date.value}T${time.value || '12:00'}`);
-        items.push({ title: title.value.trim(), place: place.value.trim(), when });
-        save();
-        render();
-        title.value=''; place.value='';
-        showToast('Moment toegevoegd 💫');
-      });
-
-      clear.addEventListener('click', ()=>{
-        items = [];
-        save();
-        render();
-        showToast('Agenda geleegd 🧹');
-      });
-
-      list.addEventListener('click', (e)=>{
-        const i = e.target?.dataset?.del;
-        if (i===undefined) return;
-        items.splice(Number(i),1);
-        save(); render();
-      });
-
-      // update badges elke minuut
-      setInterval(()=> render(), 60000);
-    })();
-
-    /* --- Extra sneltoetsen --- */
-    window.addEventListener('keydown', (e)=>{
-      if (e.key.toLowerCase() === 's'){ kissRain(); showToast('Kusjesregen! 😘') }
-      if (e.key.toLowerCase() === 'l'){ document.getElementById('brief')?.scrollIntoView({behavior:'smooth'}) }
     });
 
     /* Intro -> App overgang */
